@@ -1,7 +1,7 @@
 # Личный проект «Шесть городов»
 
 * Студент: [German Burdin](https://up.htmlacademy.ru/react/15/user/2323243).
-* Наставник: `Неизвестно`.
+* Наставник: `Maksim Ivanov`.
 
 ---
 
