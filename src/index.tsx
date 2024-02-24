@@ -8,8 +8,7 @@ const root = ReactDOM.createRoot(
 );
 
 root.render(
-  <App />
-  // <React.StrictMode>
-  //   <h1>Hello, World!</h1>
-  // </React.StrictMode>
+  <React.StrictMode>
+    <App offersNumber={312} />
+  </React.StrictMode>
 );
