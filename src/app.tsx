@@ -5,6 +5,9 @@ import LoginPage from './components/pages/login-page/login-page';
 import FavoritePage from './components/pages/favorite-page/favorite-page';
 import OfferPage from './components/pages/offer-page/offer-page';
 import NotFound from './components/pages/404-page/404-page';
+import PrivateRoute from './components/private-route/private-route';
+import { HelmetProvider } from 'react-helmet-async';
+import { AppRoute, AuthStatus } from './const';
 
 type AppProps = {
   offersCount: number;
@@ -12,18 +15,47 @@ type AppProps = {
 
 function App({ offersCount }: AppProps): JSX.Element {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path={'/'} element={<MainPage offersCount={offersCount} />} />
-        <Route path={'login'} element={<LoginPage />} />
-        <Route path={'favorites'} element={<FavoritePage />} />
-        <Route path={'offer'}>
-          <Route index element={<OfferPage />} />
-          <Route path={':id'} element={<OfferPage />} />
-        </Route>
-        <Route path={'*'} element={<NotFound />} />
-      </Routes>
-    </BrowserRouter >
+    <HelmetProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path={AppRoute.Main}
+            element={<MainPage offersCount={offersCount} />}
+          />
+          <Route
+            path={AppRoute.Login}
+            element={<LoginPage />}
+          />
+
+          <Route
+            path={AppRoute.Favorite}
+            element={
+              <PrivateRoute
+                restrictedFor = {AuthStatus.NoAuth}
+                redirectTo = {AppRoute.Login}
+              >
+                <FavoritePage />
+              </PrivateRoute>
+            }
+          />
+          <Route path={AppRoute.Offer}>
+            <Route
+              index
+              element={<OfferPage />}
+            />
+            <Route
+              path={':id'}
+              element={<OfferPage />}
+            />
+          </Route>
+          <Route
+            path={'*'}
+            element={<NotFound />}
+          />
+        </Routes>
+      </BrowserRouter >
+    </HelmetProvider>
+
   );
 }
 

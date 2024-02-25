@@ -15,7 +15,7 @@ body, html {
   flex-direction: column;
 }
 
-.notfound--title {
+.title {
   font-size: 6em;
   font-weight: 900;
   margin: 0;

@@ -1,16 +1,18 @@
 import { Link } from 'react-router-dom';
-import './404-page.css';
+import styles from './404-page.module.css';
+import { Helmet } from 'react-helmet-async';
 
 function NotFound() {
   return (
-
-    <div className="notfound">
-      <h1 className="notfound--title">404 NOT FOUND</h1>
+    <div className={`page ${styles.notfound}`}>
+      <Helmet>
+        <title>{'6 cities - Not Found'}</title>
+      </Helmet>
+      <h1 className={styles.title}>404 NOT FOUND</h1>
       <h3>
-        <Link to={'/'} className="link">Go to main page</Link>
+        <Link to={'/'}>Go to main page</Link>
       </h3>
     </div>
-
   );
 }
 
