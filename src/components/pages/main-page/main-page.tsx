@@ -119,7 +119,7 @@ function MainPage({ offersCount }: MainPageProps): JSX.Element {
               </form>
               <div className="cities__places-list places__list tabs__content">
                 {cardElements.map((element) => (
-                  <Card key={element} />
+                  <Card key={element} elementType="cities" />
                 ))}
               </div>
             </section>
