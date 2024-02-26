@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import { AppRoute } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks';
@@ -10,7 +10,6 @@ import { favoritesNumber } from '../../store/app-process/app-process-slice';
 function Header(): JSX.Element {
   const { pathname } = useLocation();
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const favsNumber = useAppSelector(getFavsNumber);
   const userData = useAppSelector(getUserData);
 
@@ -23,8 +22,7 @@ function Header(): JSX.Element {
     event.preventDefault();
 
     dispatch(favoritesNumber(-favsNumber));
-    dispatch(logoutAction())
-      .then(() => navigate(AppRoute.Login));
+    dispatch(logoutAction());
   }
 
   return (
@@ -47,7 +45,7 @@ function Header(): JSX.Element {
                   <Link className="header__nav-link header__nav-link--profile" to={userData ? AppRoute.Favorite : AppRoute.Login}>
                     <div className="header__avatar-wrapper user__avatar-wrapper">
                     </div>
-                    <span className="header__user-name user__name">{userData ? userData.email : 'Sign in'}</span>
+                    <span className="header__user-name user__name header__login">{userData ? userData.email : 'Sign in'}</span>
                     {
                       userData &&
                       <span className="header__favorite-count">{favsNumber}</span>

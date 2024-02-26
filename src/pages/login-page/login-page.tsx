@@ -34,11 +34,6 @@ function LoginPage() {
   if (authStatus === AuthStatus.Auth) {
     return <Navigate to={AppRoute.Main} />;
   }
-  // queueMicrotask(() => {
-  //   if (authStatus === AuthStatus.Auth) {
-  //     return <Navigate to={AppRoute.Main} />;
-  //   }
-  // })
 
   const randomCity = pickRandomElement(citiesName);
 
