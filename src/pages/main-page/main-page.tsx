@@ -3,24 +3,21 @@ import { useEffect, useState } from 'react';
 import Cities from '../../components/cities/cities';
 import Filter from '../../components/filter/filter';
 
-import { ActiveCity } from '../../types/city';
 import { Offer } from '../../types/offer';
+import { useAppSelector } from '../../hooks';
 
-type MainPageProps = {
-  offers: Array<Offer>;
-}
-
-function MainPage({ offers }: MainPageProps): JSX.Element {
-
+function MainPage(): JSX.Element {
+  const offers = useAppSelector((state) => state.offers);
   const [offersServer, setOffers] = useState(offers);
+
   useEffect(() => {
     fetch('https://14.design.pages.academy/six-cities/offers')
       .then((response) => response.json())
       .then((data: Array<Offer>) => setOffers(data));
   }, [setOffers]);
 
-  const [filterValue, setFilterValue] = useState<ActiveCity>('Paris');
-  const offersByCities = offersServer.filter((offer) => offer.city.name === filterValue);
+  const filterValue = useAppSelector((state) => state.activeCity);
+  const offersByCity = offersServer.filter((offer) => offer.city.name === filterValue);
 
   return (
 
@@ -29,10 +26,10 @@ function MainPage({ offers }: MainPageProps): JSX.Element {
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
           <section className="locations container">
-            <Filter cb={setFilterValue} />
+            <Filter />
           </section>
         </div>
-        <Cities offers={offersByCities} selectedCity={filterValue} />
+        <Cities offersByCity={offersByCity} selectedCity={filterValue} />
       </main>
     </div>
 
