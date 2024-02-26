@@ -1,8 +1,21 @@
 import Loc from './loc';
 
 type City = {
-  name: 'Amsterdam' | 'Paris';
+  name: ActiveCity;
   location: Loc;
 }
 
-export default City;
+type ActiveCity = 'Paris' | 'Cologne' | 'Brussels' | 'Amsterdam' | 'Hamburg' | 'Dusseldorf'
+
+type CityLocationType = {
+  title: City['name'];
+  lat: number;
+  lng: number;
+  zoom: number;
+}
+
+export type {
+  City,
+  ActiveCity,
+  CityLocationType
+};

@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import MainPage from './pages/main-page/main-page';
 import LoginPage from './pages/login-page/login-page';
-import FavoritePage from './pages/favorites-page/favorite-page';
+import FavoritePage from './pages/favorite-page/favorite-page';
 import OfferPage from './pages/offer-page/offer-page';
 import NotFound from './pages/404-page/404-page';
 import PrivateRoute from './components/private-route/private-route';
@@ -12,14 +12,13 @@ import { AppRoute, AuthStatus } from './const';
 import Layout from './components/layout/layout';
 import ScrollToTop from './components/scroll-to-top/scroll-to-top';
 
-import Offer from './types/offer';
+import {Offer} from './types/offer';
 
 type AppProps = {
   offers: Array<Offer>;
-  upcomingOffers: Array<Offer>;
 }
 
-function App({ offers, upcomingOffers }: AppProps): JSX.Element {
+function App({ offers }: AppProps): JSX.Element {
   return (
     <HelmetProvider>
       <BrowserRouter>
@@ -41,8 +40,8 @@ function App({ offers, upcomingOffers }: AppProps): JSX.Element {
             }
             />
             <Route path={AppRoute.Offer}>
-              <Route index element={<OfferPage offers={offers} upcomingOffers={upcomingOffers}/>} />
-              <Route path={':offerId'} element={<OfferPage offers={offers} upcomingOffers={upcomingOffers} />} />
+              <Route index element={<OfferPage offers={offers} />} />
+              <Route path={':offerId'} element={<OfferPage offers={offers} />} />
             </Route>
             <Route path={AppRoute.NotFound} element={<NotFound />} />
           </Route>

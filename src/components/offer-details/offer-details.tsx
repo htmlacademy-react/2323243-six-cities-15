@@ -1,12 +1,12 @@
 import { Fragment } from 'react';
 
-import ReviewList from '../reviewList/reviewList';
+import Reviews from './reviews/reviews';
 import reviews from '../../mocks/reviews';
 
-import Offer from '../../types/offer';
+import {OfferServer} from '../../types/offer';
 
 type OfferDetailsProps = {
-  selectedOffer: Offer;
+  selectedOffer: OfferServer;
 }
 
 function OfferDetails({ selectedOffer }: OfferDetailsProps): JSX.Element {
@@ -57,10 +57,10 @@ function OfferDetails({ selectedOffer }: OfferDetailsProps): JSX.Element {
               {selectedOffer.type[0].toUpperCase() + selectedOffer.type.slice(1)}
             </li>
             <li className="offer__feature offer__feature--bedrooms">
-              {selectedOffer.bedrooms} Bedrooms
+              {selectedOffer.bedrooms} {selectedOffer.bedrooms === 1 ? 'Bedroom' : 'Bedrooms'}
             </li>
             <li className="offer__feature offer__feature--adults">
-              Max {selectedOffer.maxAdults} adults
+              Max {selectedOffer.maxAdults} {selectedOffer.maxAdults === 1 ? 'adult' : 'adults'}
             </li>
           </ul>
           <div className="offer__price">
@@ -105,7 +105,7 @@ function OfferDetails({ selectedOffer }: OfferDetailsProps): JSX.Element {
               </p>
             </div>
           </div>
-          <ReviewList reviews={reviews} />
+          <Reviews reviews={reviews} />
         </div>
       </div >
     </>

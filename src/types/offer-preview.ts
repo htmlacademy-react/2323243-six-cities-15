@@ -1,4 +1,4 @@
-import City from './city';
+import {City} from './city';
 import Loc from './loc';
 
 type OfferPreview = {
