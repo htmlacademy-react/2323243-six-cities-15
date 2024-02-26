@@ -9,7 +9,7 @@ import { AppDispatch, State } from '../types/state';
 import { AuthData } from '../types/auth-data';
 import { UserData } from '../types/user-data';
 import { Offer, SelectedOffer } from '../types/offer';
-import ReviewType from '../types/review';
+import ReviewType, { CommentSend } from '../types/review';
 
 
 const fetchOffersAction = createAsyncThunk<void, undefined, {
@@ -64,6 +64,22 @@ const fetchSelectedOfferDataAction = createAsyncThunk<void, string, {
   }
 );
 
+const postCommentAction = createAsyncThunk<
+  ReviewType,
+  { reviewData: CommentSend; offerId: string | undefined },
+  { dispatch: AppDispatch; extra: AxiosInstance }
+>('user/postReview',
+  async ({ reviewData, offerId }, {dispatch, extra: api }) => {
+    setTimeout(() => {
+      dispatch(isLoaded(false));
+    }, 2000);
+    const path = APIRoute.Reviews + offerId;
+    const { data } = await api.post<ReviewType>(path, reviewData);
+    setTimeout(() => dispatch(isLoaded(true)), 2000);
+    return data;
+  }
+);
+
 
 const checkAuthAction = createAsyncThunk<void, undefined, {
   dispatch: AppDispatch;
@@ -115,6 +131,7 @@ const clearErrorAction = createAsyncThunk('app/clearError',
 export {
   fetchOffersAction,
   fetchSelectedOfferDataAction,
+  postCommentAction,
   checkAuthAction,
   loginAction,
   logoutAction,

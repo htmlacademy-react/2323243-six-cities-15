@@ -12,7 +12,12 @@ function processErrorHandle(message: string): void {
   store.dispatch(clearErrorAction());
 }
 
+function dateInMs(value: string) {
+  return Date.parse(value);
+}
+
 export {
   formatDate,
   processErrorHandle,
+  dateInMs,
 };
