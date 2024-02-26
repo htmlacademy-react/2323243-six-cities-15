@@ -14,12 +14,12 @@ import ScrollToTop from './components/scroll-to-top/scroll-to-top';
 
 import Offer from './types/offer';
 
-
 type AppProps = {
   offers: Array<Offer>;
+  upcomingOffers: Array<Offer>;
 }
 
-function App({ offers }: AppProps): JSX.Element {
+function App({ offers, upcomingOffers }: AppProps): JSX.Element {
   return (
     <HelmetProvider>
       <BrowserRouter>
@@ -41,8 +41,8 @@ function App({ offers }: AppProps): JSX.Element {
             }
             />
             <Route path={AppRoute.Offer}>
-              <Route index element={<OfferPage offers={offers}/>} />
-              <Route path={':offerId'} element={<OfferPage offers={offers} />} />
+              <Route index element={<OfferPage offers={offers} upcomingOffers={upcomingOffers}/>} />
+              <Route path={':offerId'} element={<OfferPage offers={offers} upcomingOffers={upcomingOffers} />} />
             </Route>
             <Route path={AppRoute.NotFound} element={<NotFound />} />
           </Route>

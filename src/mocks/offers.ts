@@ -56,7 +56,7 @@ const offers: Array<Offer> =
     },
     {
       city: {
-        name: 'Amsterdam1',
+        name: 'Amsterdam',
         location: {
           latitude: 52.37454,
           longitude: 4.897976,
@@ -169,7 +169,7 @@ const offers: Array<Offer> =
     },
     {
       city: {
-        name: 'Amsterdam1',
+        name: 'Amsterdam',
         location: {
           latitude: 52.37454,
           longitude: 4.897976,

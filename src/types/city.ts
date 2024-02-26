@@ -1,7 +1,7 @@
 import Loc from './loc';
 
 type City = {
-  name: string;
+  name: 'Amsterdam' | 'Paris';
   location: Loc;
 }
 

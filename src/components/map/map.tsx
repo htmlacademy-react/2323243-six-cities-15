@@ -1,6 +1,6 @@
 import 'leaflet/dist/leaflet.css';
-import leaflet from 'leaflet';
-import { Marker, layerGroup } from 'leaflet';
+import L from 'leaflet';
+
 import { useRef, useEffect } from 'react';
 
 import useMap from '../../hooks/useMap';
@@ -10,33 +10,36 @@ import { URL_MARKER_CURRENT, URL_MARKER_DEFAULT } from '../../const';
 import Offer from '../../types/offer';
 
 type MapProps = {
-  city: CityMap;
+  mapType: 'cities' | 'offer';
+  cityLocations: Array<CityMap>;
   offers: Array<Offer>;
   hoveredOfferId: Offer['id'] | null;
 }
 
-const defaultCustomIcon = leaflet.icon({
+const defaultCustomIcon = L.icon({
   iconUrl: URL_MARKER_DEFAULT,
   iconSize: [40, 40],
   iconAnchor: [20, 40]
 });
 
-const currentCustomIcon = leaflet.icon({
+const currentCustomIcon = L.icon({
   iconUrl: URL_MARKER_CURRENT,
   iconSize: [40, 40],
   iconAnchor: [20, 40]
 });
 
 
-function Map({ city, offers, hoveredOfferId }: MapProps): JSX.Element {
+function Map({ mapType, cityLocations, offers, hoveredOfferId }: MapProps): JSX.Element {
+
+
   const mapRef = useRef(null);
-  const map = useMap(mapRef, city);
+  const map = useMap(mapRef, cityLocations);
 
   useEffect(() => {
     if (map) {
-      const markerLayer = layerGroup().addTo(map);
+      const markerLayer = L.layerGroup().addTo(map);
       offers.forEach((offer) => {
-        const marker = new Marker({
+        const marker = L.marker({
           lat: offer.location.latitude,
           lng: offer.location.longitude
         });
@@ -47,7 +50,8 @@ function Map({ city, offers, hoveredOfferId }: MapProps): JSX.Element {
               ? currentCustomIcon
               : defaultCustomIcon
           )
-          .addTo(markerLayer);
+          .addTo(markerLayer)
+          .bindPopup(`<h2>${offer.title}</h2><p style="font-size:1.5em">€${offer.price}</p>`);
 
       });
 
@@ -60,8 +64,17 @@ function Map({ city, offers, hoveredOfferId }: MapProps): JSX.Element {
 
   return (
     <section
-      className="cities__map map"
+      className={`${mapType}__map map`}
       ref={mapRef}
+      style={mapType === 'offer' ?
+        {
+          height: '100%',
+          minHeight: '500px',
+          width: '100%',
+          minWidth: '1144px',
+          margin: '0, auto'
+        }
+        : undefined}
     >
 
     </section>

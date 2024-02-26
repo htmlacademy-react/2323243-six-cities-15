@@ -3,7 +3,7 @@ import Offer from '../../types/offer';
 import { AppRoute } from '../../const';
 
 type CardProps = {
-  elementType: 'cities' | 'favorite';
+  elementType: 'cities' | 'favorite' | 'offers';
   offer: Offer;
   onCardHover?: (offerId: Offer['id'] | null) => void;
 }
@@ -19,7 +19,12 @@ function Card({ elementType, offer, onCardHover }: CardProps): JSX.Element {
       className: 'favorites',
       width: '150',
       height: '110',
-    }
+    },
+    offers: {
+      className: 'near-places',
+      width: '260',
+      height: '200',
+    },
   };
 
   function handleMouseEnter() {
