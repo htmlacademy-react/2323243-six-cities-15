@@ -1,9 +1,11 @@
 import { useState } from 'react';
 
 import CardList from '../card-list/card-list';
+import Map from '../map/map';
+
+import { city } from '../../mocks/city';
 
 import Offer from '../../types/offer';
-import Map from '../map/map';
 
 type CitiesProps = {
   offers: Array<Offer>;
@@ -46,7 +48,7 @@ function Cities({ offers }: CitiesProps): JSX.Element {
           </div>
         </section>
         <div className="cities__right-section">
-          <Map city="Temporary City Name"/>
+          <Map city={city} offers={offers} hoveredOfferId={hoveredOfferId}/>
         </div>
       </div>
     </div>

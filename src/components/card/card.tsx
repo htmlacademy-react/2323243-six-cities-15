@@ -77,4 +77,3 @@ function Card({ elementType, offer, onCardHover }: CardProps): JSX.Element {
 }
 
 export default Card;
-

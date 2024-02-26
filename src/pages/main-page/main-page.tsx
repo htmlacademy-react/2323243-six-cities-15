@@ -1,6 +1,6 @@
-import Cities from '../../../components/cities/cities';
+import Cities from '../../components/cities/cities';
 
-import Offer from '../../../types/offer';
+import Offer from '../../types/offer';
 
 type MainPageProps = {
   offers: Array<Offer>;
