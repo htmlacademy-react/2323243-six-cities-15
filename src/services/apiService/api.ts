@@ -18,7 +18,7 @@ function shouldDisplayError(response: AxiosResponse) {
   return Boolean(StatusCodesMapping[response.status]);
 }
 
-const BASE_URL = 'https://15.design.htmlacademy.pro/six-cities';
+const BASE_URL = 'https://14.design.pages.academy/six-cities';
 const REQUEST_TIMEOUT = 5000;
 
 function createAPI(): AxiosInstance {

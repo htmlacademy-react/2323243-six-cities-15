@@ -1,8 +1,7 @@
 import { Helmet } from 'react-helmet-async';
-import { Navigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 
-import { AppRoute } from '../../const';
 import Map from '../../components/map/map';
 import OfferDetails from '../../components/offer-details/offer-details';
 import NearPlaces from '../../components/near-places/near-places';
@@ -11,14 +10,16 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 
 import { PlaceHolder } from '../../components/placeholder/placeholder';
 import { fetchSelectedOfferDataAction } from '../../store/api-actions';
+import NotFound from '../404-page/404-page';
+import { getIsLoaded, getNearPlaces, getSelectedOffer } from '../../store/offer-data/offer-data-selectors';
 
 
 function OfferPage(): JSX.Element {
   const dispatch = useAppDispatch();
-  const nearOffers = useAppSelector((state) => state.nearPlaces);
-  const selectedOffer = useAppSelector((state) => state.selectedOffer);
+  const nearOffers = useAppSelector(getNearPlaces);
+  const selectedOffer = useAppSelector(getSelectedOffer);
 
-  const isReady = useAppSelector((state) => state.isLoaded);
+  const isReady = useAppSelector(getIsLoaded);
 
   const { offerId } = useParams();
   useEffect(() => {
@@ -27,9 +28,8 @@ function OfferPage(): JSX.Element {
     }
   }, [dispatch, offerId]);
 
-
-  if (!selectedOffer && !offerId) {
-    return <Navigate to={AppRoute.NotFound} />;
+  if (!selectedOffer || !offerId) {
+    return <NotFound />;
   }
 
   const nearOffersCut = nearOffers.slice(0, 3);

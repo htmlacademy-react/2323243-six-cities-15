@@ -9,11 +9,12 @@ import { useEffect } from 'react';
 import { PlaceHolder } from '../../components/placeholder/placeholder';
 import { fetchFavoritesAction } from '../../store/api-actions';
 import FavoritesEmpty from '../../components/favorites-empty/favorites-empty';
+import { getFavs, getIsLoaded } from '../../store/offer-data/offer-data-selectors';
 
 function FavoritePage(): JSX.Element {
   const dispatch = useAppDispatch();
-  const isReady = useAppSelector((state) => state.isLoaded);
-  const favoriteOffers = useAppSelector((state) => state.favs) ?? [];
+  const isReady = useAppSelector(getIsLoaded);
+  const favoriteOffers = useAppSelector(getFavs) ?? [];
 
   const favoriteOffersLength = favoriteOffers.length;
 

@@ -1,18 +1,43 @@
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import { SelectedOffer } from '../../types/offer';
 import ReviewList from './review-ist/review-list';
 import ReviewForm from './review-form/review-form';
-import { useAppSelector } from '../../hooks';
-import { AuthStatus } from '../../const';
+import { favoritesNumber } from '../../store/app-process/app-process-slice';
+import { postFavStatusAction } from '../../store/api-actions';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { AppRoute, AuthStatus } from '../../const';
+
+import { SelectedOffer } from '../../types/offer';
+import { getAuthStatus } from '../../store/users-process/user-process-selectors';
+import { getRatingValue } from '../../utilities';
 
 type OfferDetailsProps = {
   selectedOffer: SelectedOffer;
 }
 
 function OfferDetails({ selectedOffer }: OfferDetailsProps): JSX.Element {
-  const authStatus = useAppSelector((state) => state.authStatus);
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  const authStatus = useAppSelector(getAuthStatus);
+  const [isFav, setIsFav] = useState<boolean>(selectedOffer.isFavorite);
+
   const isAvailableForm = authStatus === AuthStatus.Auth;
+  const status = isFav ? 0 : 1;
+
+  function handleFavClick() {
+    if (authStatus === AuthStatus.NoAuth) {
+      navigate(AppRoute.Login);
+    }
+    if (authStatus === AuthStatus.Auth) {
+      setIsFav((isFavPrev) => !isFavPrev);
+
+      dispatch(favoritesNumber(isFav ? -1 : 1));
+
+      dispatch(postFavStatusAction({ offerId: selectedOffer.id, status: status }));
+    }
+  }
 
   return (
     <>
@@ -42,7 +67,11 @@ function OfferDetails({ selectedOffer }: OfferDetailsProps): JSX.Element {
             <h1 className="offer__name">
               {selectedOffer.title}
             </h1>
-            <button className="offer__bookmark-button button" type="button">
+            <button
+              className={`${(isFav && authStatus === AuthStatus.Auth) ? 'offer__bookmark-button--active ' : ''}offer__bookmark-button button`}
+              type="button"
+              onClick={handleFavClick}
+            >
               <svg className="offer__bookmark-icon" width="31" height="33">
                 <use xlinkHref="#icon-bookmark"></use>
               </svg>
@@ -51,7 +80,7 @@ function OfferDetails({ selectedOffer }: OfferDetailsProps): JSX.Element {
           </div>
           <div className="offer__rating rating">
             <div className="offer__stars rating__stars">
-              <span style={{ width: `${selectedOffer.rating / 5 * 100}%` }}></span>
+              <span style={{ width: `${getRatingValue(selectedOffer.rating)}%` }}></span>
               <span className="visually-hidden">Rating</span>
             </div>
             <span className="offer__rating-value rating__value">{selectedOffer.rating}</span>
@@ -90,18 +119,18 @@ function OfferDetails({ selectedOffer }: OfferDetailsProps): JSX.Element {
           <div className="offer__host">
             <h2 className="offer__host-title">Meet the host</h2>
             <div className="offer__host-user user">
-              <div className="offer__avatar-wrapper offer__avatar-wrapper--pro user__avatar-wrapper">
+              <div className={`${selectedOffer.host.isPro ? 'offer__avatar-wrapper--pro ' : ''}offer__avatar-wrapper user__avatar-wrapper`}>
                 <img className="offer__avatar user__avatar" src={selectedOffer.host.avatarUrl} width="74" height="74" alt="Host avatar" />
               </div>
               <span className="offer__user-name">
                 {selectedOffer.host.name}
               </span>
-              <span className="offer__user-status">
-                {
-                  selectedOffer.host.isPro &&
-                  'Pro'
-                }
-              </span>
+              {
+                selectedOffer.host.isPro &&
+                <span className="offer__user-status">
+                  Pro
+                </span>
+              }
             </div>
             <div className="offer__description">
               <p className="offer__text">

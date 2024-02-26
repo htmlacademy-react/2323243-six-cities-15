@@ -13,7 +13,7 @@ function useMap(
   const isRenderedRef = useRef<boolean>(false);
 
   useEffect(() => {
-    if (!isRenderedRef.current && mapRef.current !== null && 'latitude' in cityLocation) {
+    if (!isRenderedRef.current && mapRef.current !== null && cityLocation && 'latitude' in cityLocation) {
       const instance = L.map(mapRef.current, {
         center: {
           lat: cityLocation.latitude,

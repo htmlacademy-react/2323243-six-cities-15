@@ -1,6 +1,7 @@
 import { Navigate } from 'react-router-dom';
 import { AppRoute, AuthStatus } from '../../const';
 import { useAppSelector } from '../../hooks';
+import { getAuthStatus } from '../../store/users-process/user-process-selectors';
 
 
 type PrivateRouteProps = {
@@ -9,7 +10,7 @@ type PrivateRouteProps = {
 }
 
 function PrivateRoute({ children, redirectTo }: PrivateRouteProps): JSX.Element {
-  const authStatus = useAppSelector((state) => state.authStatus);
+  const authStatus = useAppSelector(getAuthStatus);
 
   if (authStatus === AuthStatus.NoAuth) {
     return <Navigate to={redirectTo} />;
