@@ -5,14 +5,19 @@ import { Provider } from 'react-redux';
 import App from './app';
 
 import store from './store';
+import ErrorMessage from './components/error-message/error-message';
+import { checkAuthAction, fetchOffersAction } from './store/api-actions';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+store.dispatch(fetchOffersAction());
+store.dispatch(checkAuthAction());
 
 root.render(
   <React.StrictMode>
     <Provider store={store} >
+      <ErrorMessage />
       <App />
     </Provider>
 
