@@ -7,15 +7,13 @@ import { useLocation } from 'react-router-dom';
 import useMap from '../../hooks/useMap';
 import { AppRoute, URL_MARKER_CURRENT, URL_MARKER_DEFAULT } from '../../const';
 
-import { Offer, OfferServer } from '../../types/offer';
-import { CityLocationType } from '../../types/city';
-import { useAppSelector } from '../../hooks';
+import { Offer, SelectedOffer } from '../../types/offer';
+import Loc from '../../types/loc';
 
 type MapProps = {
   mapType: 'cities' | 'offer';
-  cityLocations: Array<CityLocationType>;
-  offers: Array<OfferServer> | Offer[];
-  selectedOffer?: OfferServer;
+  offers: Offer[];
+  selectedOffer?: SelectedOffer;
   hoveredOfferId?: Offer['id'] | null;
 }
 
@@ -32,27 +30,23 @@ const currentCustomIcon = L.icon({
 });
 
 
-function Map({ mapType, cityLocations, offers, hoveredOfferId, selectedOffer }: MapProps): JSX.Element {
+function Map({ mapType, offers, selectedOffer, hoveredOfferId }: MapProps): JSX.Element {
 
   const { pathname } = useLocation();
   const isOfferPage = pathname.startsWith(AppRoute.Offer);
 
-  const activeCity = useAppSelector((state) => state.activeCity);
 
+  const location: Loc = offers[0].city.location;
 
   const mapRef = useRef(null);
-  const map = useMap(mapRef, cityLocations, activeCity);
+  const map = useMap(mapRef, location);
 
-
-  if (isOfferPage && selectedOffer) {
-    offers = offers.filter((offer) => offer.id !== selectedOffer.id);
-  }
 
   useEffect(() => {
     if (map) {
       const markerLayer = L.layerGroup().addTo(map);
 
-      offers.forEach((offer) => {
+      offers?.forEach((offer) => {
 
         const marker = L.marker({
           lat: offer.location.latitude,
@@ -85,19 +79,17 @@ function Map({ mapType, cityLocations, offers, hoveredOfferId, selectedOffer }: 
         map.removeLayer(markerLayer);
       };
     }
-  }, [map, offers, hoveredOfferId, activeCity, isOfferPage, selectedOffer, mapType]);
+  }, [map, offers, hoveredOfferId, isOfferPage, selectedOffer, mapType]);
 
   useEffect(() => {
-    if (map) {
-      const location: CityLocationType | undefined = cityLocations.find((city) => city?.title === activeCity);
-      if (location) {
-        map.setView({
-          lat: location.lat,
-          lng: location.lng,
-        });
-      }
+    if (map && location) {
+      map.setView({
+        lat: location.latitude,
+        lng: location.longitude,
+      });
+
     }
-  }, [map, cityLocations, activeCity]);
+  }, [map, location]);
 
 
   return (

@@ -12,13 +12,7 @@ import { AppRoute, AuthStatus } from './const';
 import Layout from './components/layout/layout';
 import ScrollToTop from './components/scroll-to-top/scroll-to-top';
 
-import {Offer} from './types/offer';
-
-type AppProps = {
-  offers: Array<Offer>;
-}
-
-function App({ offers }: AppProps): JSX.Element {
+function App(): JSX.Element {
   return (
     <HelmetProvider>
       <BrowserRouter>
@@ -35,13 +29,13 @@ function App({ offers }: AppProps): JSX.Element {
 
             <Route path={AppRoute.Favorite} element={
               <PrivateRoute restrictedFor={AuthStatus.Unknown} redirectTo={AppRoute.Login} >
-                <FavoritePage offers={offers} />
+                <FavoritePage />
               </PrivateRoute>
             }
             />
             <Route path={AppRoute.Offer}>
-              <Route index element={<OfferPage offers={offers} />} />
-              <Route path={':offerId'} element={<OfferPage offers={offers} />} />
+              <Route index element={<OfferPage />} />
+              <Route path={':offerId'} element={<OfferPage />} />
             </Route>
             <Route path={AppRoute.NotFound} element={<NotFound />} />
           </Route>

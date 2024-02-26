@@ -1,22 +1,25 @@
 import Review from '../review/review';
 
-import type ReviewType from '../../../types/review';
+import { useAppSelector } from '../../../hooks';
 
-type ReviewListProps = {
-  reviews: Array<ReviewType>;
-}
 
-function ReviewList({ reviews }: ReviewListProps): JSX.Element {
+function ReviewList(): JSX.Element {
+
+  const reviewServer = useAppSelector((state) => state.reviews);
+
+
   return (
-    <ul className="reviews__list">
-      {reviews.map((review) => (
-        <Review
-          key={review.id}
-          review={review}
-        />
-      ))}
-    </ul>
-
+    <>
+      <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{reviewServer.length}</span></h2>
+      <ul className="reviews__list">
+        {reviewServer.map((review) => (
+          <Review
+            key={review.id}
+            review={review}
+          />
+        ))}
+      </ul>
+    </>
   );
 }
 

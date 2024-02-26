@@ -15,6 +15,16 @@ enum AuthStatus {
 
 }
 
+enum APIRoute {
+  Offers = '/offers',
+  Login = '/login',
+  Logout = '/logout',
+  // FullOffer = '/offers/',
+  Reviews = '/comments/',
+  Nearby = '/nearby',
+  PostReview = '/comments',
+}
+
 const URL_MARKER_DEFAULT =
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/demo/interactive-map/pin.svg';
 
@@ -64,6 +74,7 @@ const CITIES_LOCATION: Array<CityLocationType> = [
 export {
   AppRoute,
   AuthStatus,
+  APIRoute,
   URL_MARKER_DEFAULT,
   URL_MARKER_CURRENT,
   CITIES_LOCATION,
