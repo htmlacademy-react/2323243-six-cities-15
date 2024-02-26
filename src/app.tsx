@@ -15,14 +15,19 @@ import ScrollToTop from './components/scroll-to-top/scroll-to-top';
 import Offer from './types/offer';
 
 
-function App({ offers }: AppProps): JSX.Element {
+type AppProps = {
+  offersCount: number;
+  offers: Array<Offer>;
+}
+
+function App({ offersCount, offers }: AppProps): JSX.Element {
   return (
     <HelmetProvider>
       <BrowserRouter>
         <ScrollToTop />
         <Routes>
           <Route path={'/'} element={<Layout />} >
-            <Route path={AppRoute.Main} element={<MainPage offers={offers} />} />
+            <Route path={AppRoute.Main} element={<MainPage offersCount={offersCount} offers={offers} />} />
             <Route path={AppRoute.Login} element={
               <PrivateRoute restrictedFor={AuthStatus.Unknown} redirectTo={AppRoute.Main} >
                 <LoginPage />
