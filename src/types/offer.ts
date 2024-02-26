@@ -33,7 +33,7 @@ type SelectedOffer = { //для OfferPage
   maxAdults: number;
 }
 
-type Favs = Offer
+type Favorite = Offer
 
 
-export type { Offer, SelectedOffer, Favs };
+export type { Offer, SelectedOffer, Favorite };

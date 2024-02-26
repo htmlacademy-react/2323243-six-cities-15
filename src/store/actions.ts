@@ -1,7 +1,7 @@
 import { createAction } from '@reduxjs/toolkit';
 import { AuthStatus } from '../const';
 
-import { Favs, Offer, SelectedOffer } from '../types/offer';
+import { Favorite, Offer, SelectedOffer } from '../types/offer';
 import { ActiveCity } from '../types/city';
 import ReviewType from '../types/review';
 import { UserData } from '../types/user-data';
@@ -17,8 +17,9 @@ const setError = createAction<string | null>('setError');
 const setSelectedOffer = createAction<SelectedOffer>('data/setSelectedOffer');
 const isSelectedOfferLoaded = createAction('selectedOfferLoaded');
 
-const setFavs = createAction<Favs[]>('data/setFavs');
-const isFavsLoaded = createAction('favsLoaded');
+const setFavs = createAction<Favorite[]>('data/setFavs');
+const isFavsLoaded = createAction<boolean>('favsLoaded');
+const dropFavOffer = createAction<Offer>('data/dropFavOffer');
 
 const setNearPlaces = createAction<Offer[]>('data/setNearPlaces');
 const isNearPlacesLoaded = createAction('nearPlacesLoaded');
@@ -42,6 +43,7 @@ export {
 
   setFavs,
   isFavsLoaded,
+  dropFavOffer,
 
   setNearPlaces,
   isNearPlacesLoaded,

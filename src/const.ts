@@ -25,6 +25,7 @@ enum APIRoute {
   Reviews = '/comments/',
   Nearby = '/nearby',
   PostReview = '/comments',
+  Favorite = '/favorite',
 }
 
 const URL_MARKER_DEFAULT =

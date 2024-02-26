@@ -3,32 +3,25 @@ import { Helmet } from 'react-helmet-async';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import CardList from '../../components/card-list/card-list';
 
-import { Favs, Offer } from '../../types/offer';
+import { Offer } from '../../types/offer';
 import FavoritesByCity from '../../types/favorites-by-city';
 import { useEffect } from 'react';
-import { setFavs, isFavsLoaded } from '../../store/actions';
 import { PlaceHolder } from '../../components/placeholder/placeholder';
-import { getToken } from '../../services/apiService/token';
+import { fetchFavoritesAction } from '../../store/api-actions';
+import FavoritesEmpty from '../../components/favorites-empty/favorites-empty';
 
 function FavoritePage(): JSX.Element {
   const dispatch = useAppDispatch();
-  const isReady = useAppSelector((state) => state.isFavsLoaded);
-  const token = getToken();
+  const isReady = useAppSelector((state) => state.isLoaded);
+  const favoriteOffers = useAppSelector((state) => state.favs) ?? [];
+
+  const favoriteOffersLength = favoriteOffers.length;
+
 
   useEffect(() => {
-    fetch('https://15.design.htmlacademy.pro/six-cities/favorite', {
-      headers: {
-        'x-token': token,
-      }
-    })
-      .then((response) => response.json())
-      .then((data:Favs[]) => dispatch(setFavs(data)))
-      .then(() => setTimeout(() => {
-        dispatch(isFavsLoaded());
-      }, 500));
-  }, [dispatch]);
+    dispatch(fetchFavoritesAction());
+  },[dispatch]);
 
-  const favoriteOffers = useAppSelector((state) => state.favs) ?? [];
 
   function getFavoriteCities(favOffers: Array<Offer>): FavoritesByCity {
 
@@ -48,6 +41,8 @@ function FavoritePage(): JSX.Element {
 
   return (
     <>
+      {!favoriteOffersLength && <FavoritesEmpty />}
+
       {!isReady && <PlaceHolder />}
 
       {

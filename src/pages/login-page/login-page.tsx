@@ -22,7 +22,9 @@ function LoginPage() {
         email: emailRef.current.value,
         password: passwordRef.current.value,
       }));
-      navigate(AppRoute.Main);
+      setTimeout(() => {
+        navigate(AppRoute.Main);
+      }, 0);
     }
   }
 
