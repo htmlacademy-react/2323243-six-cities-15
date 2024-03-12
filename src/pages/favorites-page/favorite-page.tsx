@@ -1,9 +1,9 @@
 import { Helmet } from 'react-helmet-async';
 
-import CardList from '../../../components/card-list/card-list';
+import CardList from '../../components/card-list/card-list';
 
-import Offer from '../../../types/offer';
-import FavoritesByCity from '../../../types/favorites-by-city';
+import Offer from '../../types/offer';
+import FavoritesByCity from '../../types/favorites-by-city';
 
 
 type FavoritePageProps = {

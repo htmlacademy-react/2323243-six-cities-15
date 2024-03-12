@@ -1,10 +1,10 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import MainPage from './components/pages/main-page/main-page';
-import LoginPage from './components/pages/login-page/login-page';
-import FavoritePage from './components/pages/favorite-page/favorite-page';
-import OfferPage from './components/pages/offer-page/offer-page';
-import NotFound from './components/pages/404-page/404-page';
+import MainPage from './pages/main-page/main-page';
+import LoginPage from './pages/login-page/login-page';
+import FavoritePage from './pages/favorites-page/favorite-page';
+import OfferPage from './pages/offer-page/offer-page';
+import NotFound from './pages/404-page/404-page';
 import PrivateRoute from './components/private-route/private-route';
 import { HelmetProvider } from 'react-helmet-async';
 
@@ -16,18 +16,17 @@ import Offer from './types/offer';
 
 
 type AppProps = {
-  offersCount: number;
   offers: Array<Offer>;
 }
 
-function App({ offersCount, offers }: AppProps): JSX.Element {
+function App({ offers }: AppProps): JSX.Element {
   return (
     <HelmetProvider>
       <BrowserRouter>
         <ScrollToTop />
         <Routes>
           <Route path={'/'} element={<Layout />} >
-            <Route path={AppRoute.Main} element={<MainPage offersCount={offersCount} offers={offers} />} />
+            <Route path={AppRoute.Main} element={<MainPage offers={offers} />} />
             <Route path={AppRoute.Login} element={
               <PrivateRoute restrictedFor={AuthStatus.Unknown} redirectTo={AppRoute.Main} >
                 <LoginPage />

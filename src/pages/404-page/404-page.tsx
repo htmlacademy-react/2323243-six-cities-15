@@ -1,5 +1,6 @@
-import { Link } from 'react-router-dom';
 import styles from './404-page.module.css';
+
+import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 
 function NotFound() {
@@ -12,7 +13,8 @@ function NotFound() {
       <h3>
         <Link to={'/'}>Go to main page</Link>
       </h3>
-    </div>
+    </div >
+
   );
 }
 

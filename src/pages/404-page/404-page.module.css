@@ -1,0 +1,13 @@
+.notfound {
+  display: flex;
+  width: auto;
+  height: 40vh;
+  justify-content: end;
+  align-items: center;
+  flex-direction: column;
+}
+
+.title {
+  color: aquamarine;
+  font-size: 5em;
+}

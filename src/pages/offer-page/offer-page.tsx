@@ -1,11 +1,11 @@
 import { Helmet } from 'react-helmet-async';
 import { Navigate, useParams } from 'react-router-dom';
 
-import { AppRoute } from '../../../const';
+import { AppRoute } from '../../const';
 
-import OfferDetails from '../../../components/offer-details/offer-details';
+import OfferDetails from '../../components/offer-details/offer-details';
 
-import Offer from '../../../types/offer';
+import Offer from '../../types/offer';
 
 type OfferPageProps = {
   offers: Array<Offer>;
