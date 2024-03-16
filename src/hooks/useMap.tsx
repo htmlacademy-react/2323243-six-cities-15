@@ -1,27 +1,29 @@
 import { useState, useRef, useEffect } from 'react';
 
-import { Map, TileLayer } from 'leaflet';
+import { Map } from 'leaflet';
+import L from 'leaflet';
 
 import { CityMap } from '../mocks/city';
 
 function useMap(
   mapRef: React.MutableRefObject<HTMLElement | null>,
-  city: CityMap
+  cityLocations: Array<CityMap>
 ): Map | null {
   const [map, setMap] = useState<Map | null>(null);
   const isRenderedRef = useRef<boolean>(false);
+  const cityLocation = cityLocations.find((it) => it?.title === 'Amsterdam');
 
   useEffect(() => {
-    if (!isRenderedRef.current && mapRef.current !== null) {
-      const instance = new Map(mapRef.current, {
+    if (!isRenderedRef.current && mapRef.current !== null && cityLocation) {
+      const instance = L.map(mapRef.current, {
         center: {
-          lat: city.lat,
-          lng: city.lng,
+          lat: cityLocation.lat,
+          lng: cityLocation.lng,
         },
-        zoom: city.zoom
+        zoom: cityLocation.zoom
       });
 
-      const layer = new TileLayer(
+      const layer = L.tileLayer(
         'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
         {
           attribution:
@@ -29,12 +31,12 @@ function useMap(
         }
       );
 
-      instance.addLayer(layer);
+      layer.addTo(instance);
 
       setMap(instance);
       isRenderedRef.current = true;
     }
-  }, [mapRef, city]);
+  }, [mapRef, cityLocation]);
   return map;
 }
 

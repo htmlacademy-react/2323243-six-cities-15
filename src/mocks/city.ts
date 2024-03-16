@@ -1,9 +1,11 @@
+import City from '../types/city';
+
 type CityMap = {
-  title: string;
+  title: City['name'];
   lat: number;
   lng: number;
   zoom: number;
-}
+} | undefined
 
 type Point = {
   title: string;
@@ -11,14 +13,22 @@ type Point = {
   lng: number;
 }
 
-const city: CityMap = {
-  title: 'Amsterdam',
-  lat: 52.37454,
-  lng: 4.897976,
-  zoom: 12,
-};
+const cities: Array<CityMap> = [
+  {
+    title: 'Amsterdam',
+    lat: 52.37454,
+    lng: 4.897976,
+    zoom: 12,
+  },
+  {
+    title: 'Paris',
+    lat: 0,
+    lng: 0,
+    zoom: 12,
+  },
+];
 
-export {city};
+export {cities};
 export type {CityMap, Point};
 
 

@@ -4,7 +4,7 @@ import Offer from '../../types/offer';
 
 
 type OfferListProps = {
-  elementType: 'cities' | 'favorite';
+  elementType: 'cities' | 'favorite' | 'offers';
   offers: Array<Offer>;
   onCardHover?: (offerId: Offer['id'] | null) => void;
 }
