@@ -1,37 +1,57 @@
 import { useState } from 'react';
 
-function Sort(): JSX.Element {
-  const values = ['Popular', 'Price: low to high', 'Price: high to low', 'Top rated first'];
-  const items = values.map((value, ind) => ({
+import { SortType } from '../../types/sort';
+
+type SortProps = {
+  cb: (sortValue: SortType) => void;
+}
+
+function Sort({ cb }: SortProps): JSX.Element {
+  const values: Array<SortType> = ['Popular', 'Price: low to high', 'Price: high to low', 'Top rated first'];
+  const items = values.map((value) => ({
     value,
-    isSelected: ind === 0
+    isSelected: false
   }));
 
-  const [state, setState] = useState(items);
+  const [sortItems, setSortItems] = useState(items);
+  const [ulClassName, setUlClassName] = useState('places__options--closed');
 
-  function handleClick(event: React.MouseEvent<HTMLLIElement> & { target: HTMLLIElement }) {
-    const selectedElement = event.target;
-    items.forEach((it) => (it.isSelected = selectedElement.textContent === it.value));
-
-    setState(items);
+  function handleUlClick() {
+    setUlClassName('places__options--opened');
   }
+
+  function handleLiClick(sortValue: SortType) {
+    items.forEach((it) => (it.isSelected = sortValue === it.value));
+
+    cb(sortValue);
+    setUlClassName('places__options--closed');
+    setSortItems(items);
+  }
+
   return (
     <form className="places__sorting" action="#" method="get">
       <span className="places__sorting-caption">Sort by</span>
-      <span className="places__sorting-type" tabIndex={0}>
-        {state.find((item) => item.isSelected)?.value}
+      <span
+        className="places__sorting-type"
+        tabIndex={0}
+        onClick={handleUlClick}
+      >
+        {sortItems.find((item) => item.isSelected)?.value || 'Popular'}
         <svg className="places__sorting-arrow" width="7" height="4">
           <use xlinkHref="#icon-arrow-select"></use>
         </svg>
       </span>
-      <ul className="places__options places__options--custom places__options--opened">
+      <ul
+        className={`places__options places__options--custom ${ulClassName}`}
+
+      >
         {
-          state.map((item) => (
+          sortItems.map((item) => (
             <li
               key={item.value}
               className={`places__option ${item.isSelected ? 'places__option--active' : ''}`}
               tabIndex={0}
-              onClick={handleClick}
+              onClick={() => handleLiClick(item.value)}
             >
               {item.value}
             </li>

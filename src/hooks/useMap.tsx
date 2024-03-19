@@ -3,15 +3,16 @@ import { useState, useRef, useEffect } from 'react';
 import { Map } from 'leaflet';
 import L from 'leaflet';
 
-import { CityMap } from '../mocks/city';
+import { ActiveCity, CityLocationType } from '../types/city';
 
 function useMap(
   mapRef: React.MutableRefObject<HTMLElement | null>,
-  cityLocations: Array<CityMap>
+  cityLocations: Array<CityLocationType>,
+  activeCity: ActiveCity
 ): Map | null {
   const [map, setMap] = useState<Map | null>(null);
   const isRenderedRef = useRef<boolean>(false);
-  const cityLocation = cityLocations.find((it) => it?.title === 'Amsterdam');
+  const cityLocation = cityLocations.find((it) => it?.title === activeCity);
 
   useEffect(() => {
     if (!isRenderedRef.current && mapRef.current !== null && cityLocation) {
@@ -36,7 +37,7 @@ function useMap(
       setMap(instance);
       isRenderedRef.current = true;
     }
-  }, [mapRef, cityLocation]);
+  }, [mapRef, cityLocation, activeCity]);
   return map;
 }
 

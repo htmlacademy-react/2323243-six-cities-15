@@ -1,4 +1,4 @@
-import Offer from './offer';
+import {Offer} from './offer';
 
 type City = string;
 

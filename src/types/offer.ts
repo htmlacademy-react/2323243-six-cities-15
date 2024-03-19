@@ -1,24 +1,64 @@
 import Host from './host';
-import City from './city';
+import { City } from './city';
 import Loc from './loc';
 
 type Offer = {
-  city: City;
-  previewImage: string;
+  id: number | string;
   title: string;
+  type: string;
+  price: number;
+  previewImage?: string;
+  city: City;
+  location: Loc;
   isFavorite: boolean;
   isPremium: boolean;
   rating: number;
-  type: string;
-  price: number;
-  location: Loc;
-  id: number;
-  images: Array<string>;
+  description: string;
   bedrooms: number;
-  maxAdults: number;
   goods: Array<string>;
   host: Host;
-  description: string;
+  images: Array<string>;
+  maxAdults: number;
 }
 
-export default Offer;
+type OfferServer = {
+  id: string;
+  title: string;
+  type: string;
+  price: number;
+  city: City;
+  location: Loc;
+  isFavorite: boolean;
+  isPremium: boolean;
+  rating: number;
+  description: string;
+  bedrooms: number;
+  goods: Array<string>;
+  host: Host;
+  images: Array<string>;
+  maxAdults: number;
+}
+
+type NearOffer = {
+  id: string;
+  title: string;
+  type: string;
+  price: number;
+  city: City;
+  location: Loc;
+  isFavorite: boolean;
+  isPremium: boolean;
+  rating: number;
+  previewImage: string;
+}
+
+type FullOffers = Offer & {
+  description: string;
+  bedrooms: number;
+  goods: Array<string>;
+  host: Host;
+  images: Array<string>;
+  maxAdults: number;
+}
+
+export type { Offer, OfferServer, NearOffer, FullOffers };
