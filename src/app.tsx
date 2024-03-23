@@ -25,7 +25,7 @@ function App({ offers }: AppProps): JSX.Element {
         <ScrollToTop />
         <Routes>
           <Route path={'/'} element={<Layout />} >
-            <Route path={AppRoute.Main} element={<MainPage offers={offers} />} />
+            <Route path={AppRoute.Main} element={<MainPage />} />
             <Route path={AppRoute.Login} element={
               <PrivateRoute restrictedFor={AuthStatus.Unknown} redirectTo={AppRoute.Main} >
                 <LoginPage />

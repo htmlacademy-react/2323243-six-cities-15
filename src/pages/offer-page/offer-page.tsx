@@ -8,9 +8,9 @@ import NearPlaces from '../../components/near-places/near-places';
 
 
 import { Offer, OfferServer } from '../../types/offer';
-import { ActiveCity } from '../../types/city';
 import { useEffect, useState } from 'react';
 import { offerServer } from '../../mocks/offer';
+import { useAppSelector } from '../../hooks';
 
 type OfferPageProps = {
   offers: Array<Offer>;
@@ -18,6 +18,7 @@ type OfferPageProps = {
 
 function OfferPage({ offers }: OfferPageProps): JSX.Element {
   const { offerId } = useParams();
+  const selectedCityName = useAppSelector((state) => state.activeCity);
   const [offersServer, setOffersServer] = useState(offers);
   const [selectedOffer, setSelectedOffer] = useState<OfferServer>(offerServer);
 
@@ -37,11 +38,8 @@ function OfferPage({ offers }: OfferPageProps): JSX.Element {
     return <Navigate to={AppRoute.NotFound} />;
   }
 
-  const selectedCityName: ActiveCity =
-    offersServer.find((offer) => offer.id === offerId)?.city.name || 'Paris';
-
   const offersByCity: Offer[] | OfferServer[] = offersServer.filter((offer) =>
-    (offer.city.name === selectedOffer.city.name));
+    (offer.city.name === selectedCityName));
 
   const nearOffers: Offer[] | Array<OfferServer> = offersByCity
     .filter((offer) => offer.id !== offerId)
@@ -63,7 +61,6 @@ function OfferPage({ offers }: OfferPageProps): JSX.Element {
             mapType={'offer'}
             cityLocations={CITIES_LOCATION}
             offers={onMapOffers}
-            activeCity={selectedCityName}
             selectedOffer={selectedOffer}
           />
         </section>
