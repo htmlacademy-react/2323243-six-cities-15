@@ -1,9 +1,11 @@
 import { Link, useLocation } from 'react-router-dom';
 
 import { AppRoute } from '../../const';
+import { useAppSelector } from '../../hooks';
 
 function Header(): JSX.Element {
   const {pathname} = useLocation();
+  const favsNumber = useAppSelector((state) => state.favoritesNumber);
 
   const isMain = pathname === AppRoute.Main as string;
   const isLogin = pathname === AppRoute.Login as string;
@@ -31,7 +33,7 @@ function Header(): JSX.Element {
                     <div className="header__avatar-wrapper user__avatar-wrapper">
                     </div>
                     <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
-                    <span className="header__favorite-count">3</span>
+                    <span className="header__favorite-count">{favsNumber}</span>
                   </Link>
                 </li>
                 <li className="header__nav-item">

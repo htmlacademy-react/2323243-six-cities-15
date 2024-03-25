@@ -3,8 +3,6 @@ import { useState } from 'react';
 import CardList from '../card-list/card-list';
 import Map from '../map/map';
 
-import { CITIES_LOCATION } from '../../const';
-
 import Sort from '../sort/sort';
 
 import { ActiveCity } from '../../types/city';
@@ -35,6 +33,7 @@ function Cities({ offersByCity, selectedCity }: CitiesProps): JSX.Element {
   }
 
   return (
+
     <div className="cities">
       <div className="cities__places-container container">
         <section className="cities__places places">
@@ -52,7 +51,6 @@ function Cities({ offersByCity, selectedCity }: CitiesProps): JSX.Element {
         <div className="cities__right-section">
           <Map
             mapType={'cities'}
-            cityLocations={CITIES_LOCATION}
             offers={offersByCity}
             hoveredOfferId={hoveredOfferId}
           />
