@@ -1,13 +1,20 @@
 import Host from './host';
 
 type ReviewType = {
-  comment: string;
+  id: string;
   date: string;
-  id: number;
-  rating: number;
   user: User;
+  comment: string;
+  rating: number;
+}
+
+type CommentSend = {
+  comment: string;
+  rating: number;
 }
 
 type User = Host
 
 export default ReviewType;
+export type {CommentSend};
+

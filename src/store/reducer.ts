@@ -3,7 +3,7 @@ import { createReducer } from '@reduxjs/toolkit';
 
 import { setFavs, setNearPlaces, setSelectedOffer, setReviews,
   isLoaded, setCity, setOffers, isSelectedOfferLoaded, isFavsLoaded,
-  isNearPlacesLoaded, isReviewsLoaded, favoritesNumber, requireAuthorization,
+  isNearPlacesLoaded, isReviewSending, favoritesNumber, requireAuthorization,
   setError, setUserData } from './actions';
 import { AuthStatus } from '../const';
 
@@ -30,7 +30,7 @@ type InitialState = {
   isNearPlacesLoaded: boolean;
 
   reviews: ReviewType[];
-  isReviewsLoaded: boolean;
+  isReviewSending: boolean;
 
   authStatus: AuthStatus;
   UserData: UserData | null;
@@ -53,7 +53,7 @@ const initialState: InitialState = {
   isNearPlacesLoaded: false,
 
   reviews: [],
-  isReviewsLoaded: false,
+  isReviewSending: false,
 
   authStatus: AuthStatus.Unknown,
   UserData: null
@@ -103,8 +103,8 @@ const reducer = createReducer(initialState, (builder) => {
     .addCase(setReviews, (state, action) => {
       state.reviews = action.payload;
     })
-    .addCase(isReviewsLoaded, (state) => {
-      state.isReviewsLoaded = true;
+    .addCase(isReviewSending, (state, action) => {
+      state.isReviewSending = action.payload;
     })
 
     .addCase(requireAuthorization, (state, action) => {

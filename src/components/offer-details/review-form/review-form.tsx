@@ -1,9 +1,10 @@
-import { ChangeEvent, Fragment, useState } from 'react';
+import { FormEvent, ChangeEvent, Fragment, useState, useRef } from 'react';
+import { useAppDispatch, useAppSelector } from '../../../hooks';
+import { postCommentAction } from '../../../store/api-actions';
+import { useParams } from 'react-router-dom';
+import { isReviewSending, setReviews } from '../../../store/actions';
 
 function ReviewForm(): JSX.Element {
-  const [comment, setComment] = useState('');
-  const [rating, setRating] = useState('0');
-
   const ratingMap = {
     'perfect': '5',
     'good': '4',
@@ -11,6 +12,42 @@ function ReviewForm(): JSX.Element {
     'badly': '2',
     'terribly': '1'
   };
+
+  const MIN_COMMENT_LENGTH = 49;
+  const MAX_COMMENT_LENGTH = 300;
+
+  const [comment, setComment] = useState('');
+  const [rating, setRating] = useState('0');
+  const isSending = useAppSelector((state) => state.isReviewSending);
+
+  const formRef = useRef<HTMLFormElement | null>(null);
+  const form = formRef.current;
+
+  const dispatch = useAppDispatch();
+  const { offerId } = useParams();
+  const reviewsList = useAppSelector((state) => state.reviews);
+  const reviewsListCopy = structuredClone(reviewsList);
+
+  const sendData = {
+    reviewData: { comment, rating: Number(rating) },
+    offerId,
+  };
+
+
+  function isDisabled() {
+    const isCommentValid = (comment.length < MIN_COMMENT_LENGTH) || (comment.length > MAX_COMMENT_LENGTH);
+    const isRatingValid = Boolean(Number(rating)) === false;
+
+    return (isCommentValid || isRatingValid) || isSending;
+  }
+
+  function formReset() {
+    if (form) {
+      form.reset();
+      setComment('');
+    }
+
+  }
 
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
     setRating(event.target.value);
@@ -20,8 +57,31 @@ function ReviewForm(): JSX.Element {
     setComment(event.target.value);
   }
 
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    dispatch(isReviewSending(true));
+
+    if (rating && comment && offerId && form) {
+      dispatch(postCommentAction(sendData)).unwrap()
+        .then((review) => {
+          reviewsListCopy.push(review);
+        })
+        .then(() => {
+          dispatch(setReviews(reviewsListCopy));
+          formReset();
+        })
+        .then (() => dispatch(isReviewSending(false)));
+    }
+  }
+
   return (
-    <form className="reviews__form form" action="#" method="post">
+    <form
+      className="reviews__form form"
+      action="#"
+      method="post"
+      ref={formRef}
+      onSubmit={handleSubmit}
+    >
       <label className="reviews__label form__label" htmlFor="review">Your review</label>
 
       <div className="reviews__rating-form form__rating">
@@ -58,6 +118,8 @@ function ReviewForm(): JSX.Element {
         id="review" name="review"
         placeholder="Tell how was your stay, what you like and what can be improved"
         value={comment}
+        minLength={50}
+        maxLength={300}
         onChange={handleTextAreaChange}
       >
       </textarea>
@@ -69,9 +131,9 @@ function ReviewForm(): JSX.Element {
         <button
           className="reviews__submit form__submit button"
           type="submit"
-          disabled
+          disabled={isDisabled()}
         >
-          Submit
+          {isSending ? 'Sending...' : 'Submit'}
         </button>
       </div>
     </form>
