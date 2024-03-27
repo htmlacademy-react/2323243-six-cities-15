@@ -8,7 +8,7 @@ import NotFound from './pages/404-page/404-page';
 import PrivateRoute from './components/private-route/private-route';
 import { HelmetProvider } from 'react-helmet-async';
 
-import { AppRoute, AuthStatus } from './const';
+import { AppRoute } from './const';
 import Layout from './components/layout/layout';
 import ScrollToTop from './components/scroll-to-top/scroll-to-top';
 
@@ -20,15 +20,10 @@ function App(): JSX.Element {
         <Routes>
           <Route path={'/'} element={<Layout />} >
             <Route path={AppRoute.Main} element={<MainPage />} />
-            <Route path={AppRoute.Login} element={
-              <PrivateRoute restrictedFor={AuthStatus.Unknown} redirectTo={AppRoute.Main} >
-                <LoginPage />
-              </PrivateRoute>
-            }
-            />
+            <Route path={AppRoute.Login} element={<LoginPage />} />
 
             <Route path={AppRoute.Favorite} element={
-              <PrivateRoute restrictedFor={AuthStatus.Unknown} redirectTo={AppRoute.Login} >
+              <PrivateRoute redirectTo={AppRoute.Login} >
                 <FavoritePage />
               </PrivateRoute>
             }

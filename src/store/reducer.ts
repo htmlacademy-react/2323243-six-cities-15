@@ -1,41 +1,62 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { createReducer } from '@reduxjs/toolkit';
 
-import { fetchFavs, fetchNearPlaces, fetchSelectedOffer, fetchOffers, fetchReviews, isLoaded, setCity, setOffers, isSelectedOfferLoaded, isFavsLoaded, isNearPlacesLoaded, isReviewsLoaded, favoritesNumber, requireAuthorization } from './actions';
+import { setFavs, setNearPlaces, setSelectedOffer, setReviews,
+  isLoaded, setCity, setOffers, isSelectedOfferLoaded, isFavsLoaded,
+  isNearPlacesLoaded, isReviewsLoaded, favoritesNumber, requireAuthorization,
+  setError, setUserData } from './actions';
+import { AuthStatus } from '../const';
+
 import { ActiveCity } from '../types/city';
 import { Favs, Offer, SelectedOffer } from '../types/offer';
 import ReviewType from '../types/review';
-import { AuthStatus } from '../const';
+import { UserData } from '../types/user-data';
 
 type InitialState = {
   activeCity: ActiveCity;
   favoritesNumber: number;
+
   offers: Array<Offer>;
   isLoaded: boolean;
+  error: string | null;
+
   selectedOffer: SelectedOffer | null;
   isSelectedOfferLoaded: boolean;
+
   favs: Favs[];
   isFavsLoaded: boolean;
+
   nearPlaces: Offer[];
   isNearPlacesLoaded: boolean;
+
   reviews: ReviewType[];
   isReviewsLoaded: boolean;
+
   authStatus: AuthStatus;
+  UserData: UserData | null;
 }
 const initialState: InitialState = {
   activeCity: 'Paris',
   favoritesNumber: 0,
+
   offers: [],
   isLoaded: false,
+  error: null,
+
   selectedOffer: null,
   isSelectedOfferLoaded: false,
+
   favs: [],
   isFavsLoaded: false,
+
   nearPlaces: [],
   isNearPlacesLoaded: false,
+
   reviews: [],
   isReviewsLoaded: false,
+
   authStatus: AuthStatus.Unknown,
+  UserData: null
 };
 
 const reducer = createReducer(initialState, (builder) => {
@@ -47,41 +68,50 @@ const reducer = createReducer(initialState, (builder) => {
     .addCase(favoritesNumber, (state, action) => {
       state.favoritesNumber = state.favoritesNumber + action.payload;
     })
+
     .addCase(setOffers, (state, action) => {
       state.offers = action.payload;
     })
-    .addCase(isLoaded, (state) => {
-      state.isLoaded = true;
+    .addCase(isLoaded, (state, action) => {
+      state.isLoaded = action.payload;
     })
-    .addCase(fetchOffers, (state, action) => {
-      state.offers = action.payload;
+    .addCase(setError, (state, action) => {
+      state.error = action.payload;
     })
-    .addCase(fetchSelectedOffer, (state, action) => {
+
+    .addCase(setSelectedOffer, (state, action) => {
       state.selectedOffer = action.payload;
     })
     .addCase(isSelectedOfferLoaded, (state) => {
       state.isSelectedOfferLoaded = true;
     })
-    .addCase(fetchFavs, (state, action) => {
+
+    .addCase(setFavs, (state, action) => {
       state.favs = action.payload;
     })
     .addCase(isFavsLoaded, (state) => {
       state.isFavsLoaded = true;
     })
-    .addCase(fetchNearPlaces, (state, action) => {
+
+    .addCase(setNearPlaces, (state, action) => {
       state.nearPlaces = action.payload;
     })
     .addCase(isNearPlacesLoaded, (state) => {
       state.isNearPlacesLoaded = true;
     })
-    .addCase(fetchReviews, (state, action) => {
+
+    .addCase(setReviews, (state, action) => {
       state.reviews = action.payload;
     })
     .addCase(isReviewsLoaded, (state) => {
       state.isReviewsLoaded = true;
     })
+
     .addCase(requireAuthorization, (state, action) => {
       state.authStatus = action.payload;
+    })
+    .addCase(setUserData, (state, action) => {
+      state.UserData = action.payload;
     });
 });
 

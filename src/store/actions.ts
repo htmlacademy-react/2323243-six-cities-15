@@ -1,42 +1,54 @@
 import { createAction } from '@reduxjs/toolkit';
-import { ActiveCity } from '../types/city';
-import { Favs, Offer, SelectedOffer } from '../types/offer';
-import ReviewType from '../types/review';
 import { AuthStatus } from '../const';
+
+import { Favs, Offer, SelectedOffer } from '../types/offer';
+import { ActiveCity } from '../types/city';
+import ReviewType from '../types/review';
+import { UserData } from '../types/user-data';
 
 const setCity = createAction<{ city: ActiveCity }>('setCity');
 
-const setOffers = createAction<Offer[]>('setOffers');
 const favoritesNumber = createAction<number>('favoritesNumber');
 
-const fetchOffers = createAction<Offer[]>('fetchOffers');
-const isLoaded = createAction('loaded');
+const setOffers = createAction<Offer[]>('setOffers');
+const isLoaded = createAction<boolean>('loaded');
+const setError = createAction<string | null>('setError');
 
-const fetchSelectedOffer = createAction<SelectedOffer>('fetchOffer');
+const setSelectedOffer = createAction<SelectedOffer>('data/setSelectedOffer');
 const isSelectedOfferLoaded = createAction('selectedOfferLoaded');
-const fetchFavs = createAction<Favs[]>('fetchFavs');
+
+const setFavs = createAction<Favs[]>('data/setFavs');
 const isFavsLoaded = createAction('favsLoaded');
-const fetchNearPlaces = createAction<Offer[]>('fetchNearPlaces');
+
+const setNearPlaces = createAction<Offer[]>('data/setNearPlaces');
 const isNearPlacesLoaded = createAction('nearPlacesLoaded');
-const fetchReviews = createAction<ReviewType[]>('fetchReviews');
+
+const setReviews = createAction<ReviewType[]>('data/setReviews');
 const isReviewsLoaded = createAction('reviewsLoaded');
 
 const requireAuthorization = createAction<AuthStatus>('user/requireAuthorization');
-
+const setUserData = createAction<UserData>('user/setUserData');
 
 export {
   setCity,
-  setOffers,
   favoritesNumber,
-  fetchOffers,
+
+  setOffers,
   isLoaded,
-  fetchSelectedOffer,
+  setError,
+
+  setSelectedOffer,
   isSelectedOfferLoaded,
-  fetchFavs,
+
+  setFavs,
   isFavsLoaded,
-  fetchNearPlaces,
+
+  setNearPlaces,
   isNearPlacesLoaded,
-  fetchReviews,
+
+  setReviews,
   isReviewsLoaded,
+
   requireAuthorization,
+  setUserData,
 };
