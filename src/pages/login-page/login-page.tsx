@@ -66,6 +66,7 @@ function LoginPage() {
                   type="password"
                   name="password"
                   placeholder="Password"
+                  pattern="([a-zA-Z]+[0-9]+)|([0-9]+[a-zA-Z]+)"
                   required
                 />
               </div>

@@ -24,7 +24,7 @@ const setNearPlaces = createAction<Offer[]>('data/setNearPlaces');
 const isNearPlacesLoaded = createAction('nearPlacesLoaded');
 
 const setReviews = createAction<ReviewType[]>('data/setReviews');
-const isReviewsLoaded = createAction('reviewsLoaded');
+const isReviewSending = createAction<boolean>('reviewSending');
 
 const requireAuthorization = createAction<AuthStatus>('user/requireAuthorization');
 const setUserData = createAction<UserData>('user/setUserData');
@@ -47,7 +47,7 @@ export {
   isNearPlacesLoaded,
 
   setReviews,
-  isReviewsLoaded,
+  isReviewSending,
 
   requireAuthorization,
   setUserData,
