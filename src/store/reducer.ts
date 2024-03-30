@@ -1,14 +1,13 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { createReducer } from '@reduxjs/toolkit';
 
 import { setFavs, setNearPlaces, setSelectedOffer, setReviews,
   isLoaded, setCity, setOffers, isSelectedOfferLoaded, isFavsLoaded,
   isNearPlacesLoaded, isReviewSending, favoritesNumber, requireAuthorization,
-  setError, setUserData } from './actions';
+  setError, setUserData, dropFavOffer } from './actions';
 import { AuthStatus } from '../const';
 
 import { ActiveCity } from '../types/city';
-import { Favs, Offer, SelectedOffer } from '../types/offer';
+import { Favorite, Offer, SelectedOffer } from '../types/offer';
 import ReviewType from '../types/review';
 import { UserData } from '../types/user-data';
 
@@ -23,7 +22,7 @@ type InitialState = {
   selectedOffer: SelectedOffer | null;
   isSelectedOfferLoaded: boolean;
 
-  favs: Favs[];
+  favs: Favorite[];
   isFavsLoaded: boolean;
 
   nearPlaces: Offer[];
@@ -72,6 +71,7 @@ const reducer = createReducer(initialState, (builder) => {
     .addCase(setOffers, (state, action) => {
       state.offers = action.payload;
     })
+
     .addCase(isLoaded, (state, action) => {
       state.isLoaded = action.payload;
     })
@@ -89,8 +89,12 @@ const reducer = createReducer(initialState, (builder) => {
     .addCase(setFavs, (state, action) => {
       state.favs = action.payload;
     })
-    .addCase(isFavsLoaded, (state) => {
-      state.isFavsLoaded = true;
+    .addCase(isFavsLoaded, (state, action) => {
+      state.isFavsLoaded = action.payload;
+    })
+    .addCase(dropFavOffer, (state, action) => {
+      const index = state.favs.findIndex((offer) => offer.id === action.payload.id);
+      state.favs.splice(index, 1);
     })
 
     .addCase(setNearPlaces, (state, action) => {
@@ -115,6 +119,4 @@ const reducer = createReducer(initialState, (builder) => {
     });
 });
 
-
 export default reducer;
-
