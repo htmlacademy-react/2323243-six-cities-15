@@ -1,9 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
 import { Offer } from '../../types/offer';
 import { AppRoute, AuthStatus } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { favoritesNumber } from '../../store/app-process/app-process-slice';
 import { postFavStatusAction } from '../../store/api-actions';
 import { getAuthStatus } from '../../store/users-process/user-process-selectors';
 import { getRatingValue } from '../../utilities';
@@ -34,23 +32,19 @@ const options = {
 
 function Card({ elementType, offer, onCardHover }: CardProps): JSX.Element {
 
-  const [isFav, setIsFav] = useState<boolean>(offer.isFavorite);
-
-  const status = isFav ? 0 : 1;
-
   const dispatch = useAppDispatch();
   const authStatus = useAppSelector(getAuthStatus);
   const navigate = useNavigate();
 
-  function handleFavClick() {
+  function handleFavClick(favOffer: Offer) {
     if (authStatus === AuthStatus.NoAuth) {
       navigate(AppRoute.Login);
+      return;
     }
+
+    const isFavorite = favOffer.isFavorite;
+    const status = isFavorite ? 0 : 1;
     if (authStatus === AuthStatus.Auth) {
-      setIsFav((isFavPrev) => !isFavPrev);
-
-      dispatch(favoritesNumber(isFav ? -1 : 1));
-
       dispatch(postFavStatusAction({ offerId: offer.id, status: status }));
     }
   }
@@ -91,7 +85,7 @@ function Card({ elementType, offer, onCardHover }: CardProps): JSX.Element {
           <button
             className={`${(offer.isFavorite && authStatus === AuthStatus.Auth) ? 'place-card__bookmark-button--active ' : ''}place-card__bookmark-button button`}
             type="button"
-            onClick={handleFavClick}
+            onClick={() => handleFavClick(offer)}
           >
             <svg className="place-card__bookmark-icon" width="18" height="19">
               <use xlinkHref="#icon-bookmark"></use>

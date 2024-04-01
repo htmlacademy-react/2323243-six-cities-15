@@ -52,7 +52,7 @@ function Cities({ offersByCity, selectedCity }: CitiesProps): JSX.Element {
           <Map
             mapType={'cities'}
             offers={offersByCity}
-            hoveredOfferId={hoveredOfferId}
+            offerId={hoveredOfferId}
           />
         </div>
       </div>

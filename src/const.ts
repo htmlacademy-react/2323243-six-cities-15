@@ -1,5 +1,12 @@
 import { ActiveCity, CityLocationType } from './types/city';
 
+enum LoadingDataStatus {
+  Unsent = 'UNSENT',
+  Pending = 'PENDING',
+  Success = 'SUCCESS',
+  Error = 'ERROR',
+}
+
 const citiesName: ActiveCity[] = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
 
 enum NameSpace {
@@ -83,6 +90,7 @@ const CITIES_LOCATION: Array<CityLocationType> = [
 
 
 export {
+  LoadingDataStatus,
   citiesName,
   NameSpace,
   TIMEOUT_SHOW_ERROR,

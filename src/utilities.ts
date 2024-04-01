@@ -2,6 +2,18 @@ import dayjs from 'dayjs';
 import store from './store';
 import { clearErrorAction } from './store/api-actions';
 import { setError } from './store/app-process/app-process-slice';
+import { Offer } from './types/offer';
+
+function replaceFavoriteOffer (offers: Offer[], offer: Offer) {
+  const items = offers.map((it) => {
+    if (it.id === offer.id) {
+      it.isFavorite = !it.isFavorite;
+    }
+    return it;
+  });
+  return items;
+
+}
 
 function getRatingValue(rating: number) {
   return (Math.round(rating) * 100) / 5;
@@ -26,6 +38,7 @@ function dateInMs(value: string) {
 }
 
 export {
+  replaceFavoriteOffer,
   getRatingValue,
   pickRandomElement,
   formatDate,
