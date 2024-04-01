@@ -4,15 +4,10 @@ import Header from '../header/header';
 
 function Layout(): JSX.Element {
   return (
-
-    // <div className="page page--gray">
-    // <div className="page">
     <>
-      <Header />
+      <Header block={'hasNavigation'}/>
       <Outlet />
     </>
-    // </div>
-
   );
 }
 

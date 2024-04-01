@@ -12,7 +12,7 @@ function Filter(): JSX.Element {
   const filters: Filters = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
   const dispatch = useAppDispatch();
 
-  function handleClick(filter: ActiveCity) {
+  function handleLiClick(filter: ActiveCity) {
     return () => dispatch(setCity({city: filter}));
   }
 
@@ -22,7 +22,7 @@ function Filter(): JSX.Element {
         <li
           key={filter}
           className="locations__item"
-          onClick={handleClick(filter)}
+          onClick={handleLiClick(filter)}
         >
           <Link
             to={AppRoute.Main}

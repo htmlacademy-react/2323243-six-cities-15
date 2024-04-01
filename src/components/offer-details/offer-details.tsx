@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 
 import ReviewList from './review-ist/review-list';
 import ReviewForm from './review-form/review-form';
-import { favoritesNumber } from '../../store/app-process/app-process-slice';
 import { postFavStatusAction } from '../../store/api-actions';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { AppRoute, AuthStatus } from '../../const';
@@ -19,23 +18,24 @@ type OfferDetailsProps = {
 function OfferDetails({ selectedOffer }: OfferDetailsProps): JSX.Element {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const [isFavorite, setIsFavorite] = useState(selectedOffer.isFavorite);
 
   const authStatus = useAppSelector(getAuthStatus);
-  const [isFav, setIsFav] = useState<boolean>(selectedOffer.isFavorite);
 
   const isAvailableForm = authStatus === AuthStatus.Auth;
-  const status = isFav ? 0 : 1;
 
   function handleFavClick() {
     if (authStatus === AuthStatus.NoAuth) {
       navigate(AppRoute.Login);
+      return;
     }
+
+    const status = isFavorite ? 0 : 1;
     if (authStatus === AuthStatus.Auth) {
-      setIsFav((isFavPrev) => !isFavPrev);
-
-      dispatch(favoritesNumber(isFav ? -1 : 1));
-
-      dispatch(postFavStatusAction({ offerId: selectedOffer.id, status: status }));
+      dispatch(postFavStatusAction({ offerId: selectedOffer.id, status: status })).unwrap()
+        .then((response) => {
+          setIsFavorite(response.isFavorite);
+        });
     }
   }
 
@@ -68,7 +68,7 @@ function OfferDetails({ selectedOffer }: OfferDetailsProps): JSX.Element {
               {selectedOffer.title}
             </h1>
             <button
-              className={`${(isFav && authStatus === AuthStatus.Auth) ? 'offer__bookmark-button--active ' : ''}offer__bookmark-button button`}
+              className={`${(isFavorite && authStatus === AuthStatus.Auth) ? 'offer__bookmark-button--active ' : ''}offer__bookmark-button button`}
               type="button"
               onClick={handleFavClick}
             >

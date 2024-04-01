@@ -6,7 +6,11 @@ import { logoutAction } from '../../store/api-actions';
 import { getAuthStatus, getUserData } from '../../store/users-process/user-process-selectors';
 import { getFavs } from '../../store/offer-data/offer-data-selectors';
 
-function Header(): JSX.Element {
+type HeaderProps = {
+  block?: 'hasNavigation' | 'noNavigation';
+}
+
+function Header({block}: HeaderProps): JSX.Element {
   const { pathname } = useLocation();
   const dispatch = useAppDispatch();
 
@@ -15,7 +19,6 @@ function Header(): JSX.Element {
   const authStatus = useAppSelector(getAuthStatus);
 
   const isMain = pathname === AppRoute.Main as string;
-  const isLogin = pathname === AppRoute.Login as string;
 
   const link = isMain ? '' : AppRoute.Main;
 
@@ -38,7 +41,7 @@ function Header(): JSX.Element {
             </Link>
           </div>
           {
-            !isLogin && authStatus === AuthStatus.Auth &&
+            block === 'hasNavigation' && authStatus === AuthStatus.Auth &&
             <nav className="header__nav">
               <ul className="header__nav-list">
                 {
@@ -49,9 +52,7 @@ function Header(): JSX.Element {
                         <div style={{ backgroundImage: `url(${userData.avatarUrl})`, borderRadius: '50%' }} className="header__avatar-wrapper user__avatar-wrapper">
                         </div>
                         <span className="header__user-name user__name header__login">{userData ? userData.email : 'Sign in'}</span>
-
                         <span className="header__favorite-count">{favs.length}</span>
-
                       </Link>
                     </li>
 
@@ -75,7 +76,7 @@ function Header(): JSX.Element {
             </nav>
           }
           {
-            authStatus === AuthStatus.NoAuth &&
+            block === 'hasNavigation' && authStatus === AuthStatus.NoAuth &&
             <nav className='header__nav'>
               <ul className='header__nav-list'>
                 <li className='header__nav-item user'>

@@ -11,13 +11,20 @@ import { HelmetProvider } from 'react-helmet-async';
 import { AppRoute } from './const';
 import Layout from './components/layout/layout';
 import ScrollToTop from './components/scroll-to-top/scroll-to-top';
-import { useAppSelector } from './hooks';
+import { useAppDispatch, useAppSelector } from './hooks';
 import { getErrorStatus } from './store/offer-data/offer-data-selectors';
 import Error from './pages/error/error';
+import { useEffect } from 'react';
+import { checkAuthAction } from './store/api-actions';
 
 
 function App(): JSX.Element {
+  const dispatch = useAppDispatch();
   const hasError = useAppSelector(getErrorStatus);
+
+  useEffect(() => {
+    dispatch(checkAuthAction());
+  }, [dispatch]);
 
   if (hasError) {
     return (
@@ -30,7 +37,6 @@ function App(): JSX.Element {
         <Routes>
           <Route path={'/'} element={<Layout />} >
             <Route path={AppRoute.Main} element={<MainPage />} />
-            <Route path={AppRoute.Login} element={<LoginPage />} />
 
             <Route path={AppRoute.Favorite} element={
               <PrivateRoute redirectTo={AppRoute.Login} >
@@ -44,6 +50,7 @@ function App(): JSX.Element {
             </Route>
             <Route path={AppRoute.NotFound} element={<NotFound />} />
           </Route>
+          <Route path={AppRoute.Login} element={<LoginPage />} />
         </Routes>
       </BrowserRouter >
     </HelmetProvider >

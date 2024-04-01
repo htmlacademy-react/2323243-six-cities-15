@@ -1,15 +1,19 @@
 import Cities from '../../components/cities/cities';
 import Filter from '../../components/filter/filter';
 
-import { useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { PlaceHolder } from '../../components/placeholder/placeholder';
 import { AuthStatus } from '../../const';
 import MainEmpty from '../../components/main-empty/main-empty';
 import { getIsOffersLoading, getOffers } from '../../store/offer-data/offer-data-selectors';
 import { getAuthStatus } from '../../store/users-process/user-process-selectors';
 import { getActiveCity } from '../../store/app-process/app-process-selectors';
+import { fetchOffersAction } from '../../store/api-actions';
+import { useEffect } from 'react';
 
 function MainPage(): JSX.Element {
+  const dispatch = useAppDispatch();
+
   const offers = useAppSelector(getOffers);
   const isLoading = useAppSelector(getIsOffersLoading);
   const authStatus = useAppSelector(getAuthStatus);
@@ -18,6 +22,10 @@ function MainPage(): JSX.Element {
   const offersByCity = offers.filter((offer) => offer.city.name === filterValue);
 
   const offersLength = offersByCity.length;
+
+  useEffect(() => {
+    dispatch(fetchOffersAction());
+  }, [dispatch]);
 
   return (
     <>
