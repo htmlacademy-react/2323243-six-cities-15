@@ -1,4 +1,12 @@
-import { CityLocationType } from './types/city';
+import { ActiveCity, CityLocationType } from './types/city';
+
+const citiesName: ActiveCity[] = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
+
+enum NameSpace {
+  Data = 'DATA',
+  App = 'APP',
+  User = 'USER',
+}
 
 const TIMEOUT_SHOW_ERROR = 2000;
 
@@ -29,10 +37,10 @@ enum APIRoute {
 }
 
 const URL_MARKER_DEFAULT =
-  'https://assets.htmlacademy.ru/content/intensive/javascript-1/demo/interactive-map/pin.svg';
+  '../markup/img/pin.svg';
 
 const URL_MARKER_CURRENT =
-  'https://assets.htmlacademy.ru/content/intensive/javascript-1/demo/interactive-map/main-pin.svg';
+  '../markup/img/pin-active.svg';
 
 const CITIES_LOCATION: Array<CityLocationType> = [
   {
@@ -75,6 +83,8 @@ const CITIES_LOCATION: Array<CityLocationType> = [
 
 
 export {
+  citiesName,
+  NameSpace,
   TIMEOUT_SHOW_ERROR,
   AppRoute,
   AuthStatus,

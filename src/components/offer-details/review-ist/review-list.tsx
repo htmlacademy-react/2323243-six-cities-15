@@ -2,11 +2,12 @@ import Review from '../review/review';
 
 import { useAppSelector } from '../../../hooks';
 import { dateInMs } from '../../../utilities';
+import { getReviews } from '../../../store/offer-data/offer-data-selectors';
 
 
 function ReviewList(): JSX.Element {
 
-  const reviewServer = useAppSelector((state) => state.reviews);
+  const reviewServer = useAppSelector(getReviews);
 
   const reviewServerCopy = structuredClone(reviewServer)
     .sort((a, b) => dateInMs(b.date) - dateInMs(a.date))

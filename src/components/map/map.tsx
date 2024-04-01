@@ -36,7 +36,7 @@ function Map({ mapType, offers, selectedOffer, hoveredOfferId }: MapProps): JSX.
   const isOfferPage = pathname.startsWith(AppRoute.Offer);
 
 
-  const location: Loc = offers[0].city.location;
+  const location: Loc = offers[0]?.city.location;
 
   const mapRef = useRef(null);
   const map = useMap(mapRef, location);

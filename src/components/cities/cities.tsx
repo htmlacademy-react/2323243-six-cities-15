@@ -8,7 +8,6 @@ import Sort from '../sort/sort';
 import { ActiveCity } from '../../types/city';
 import { Offer } from '../../types/offer';
 import { SortType } from '../../types/sort';
-import MainEmpty from '../main-empty/main-empty';
 
 type CitiesProps = {
   offersByCity: Array<Offer>;
@@ -16,7 +15,7 @@ type CitiesProps = {
 }
 
 function Cities({ offersByCity, selectedCity }: CitiesProps): JSX.Element {
-  const offersLength = offersByCity.length;
+
   const [hoveredOfferId, setHoveredOfferId] = useState<Offer['id'] | null>(null);
   const [sortItem, setSortItem] = useState<SortType>('Popular');
 
@@ -35,33 +34,30 @@ function Cities({ offersByCity, selectedCity }: CitiesProps): JSX.Element {
   }
 
   return (
-    <>
-      {!offersLength && <MainEmpty />}
-
-      <div className="cities">
-        <div className="cities__places-container container">
-          <section className="cities__places places">
-            <h2 className="visually-hidden">Places</h2>
-            <b className="places__found">{offersByCity.length} places to stay in {selectedCity}</b>
-            <Sort cb={setSortItem} />
-            <div className="cities__places-list places__list tabs__content">
-              <CardList
-                elementType={'cities'}
-                offers={sortedOffers}
-                onCardHover={handleCardHover}
-              />
-            </div>
-          </section>
-          <div className="cities__right-section">
-            <Map
-              mapType={'cities'}
-              offers={offersByCity}
-              hoveredOfferId={hoveredOfferId}
+    <div className="cities">
+      <div className="cities__places-container container">
+        <section className="cities__places places">
+          <h2 className="visually-hidden">Places</h2>
+          <b className="places__found">{offersByCity.length} {offersByCity.length === 1 ? 'place' : 'places'} to stay in {selectedCity}</b>
+          <Sort cb={setSortItem} />
+          <div className="cities__places-list places__list tabs__content">
+            <CardList
+              elementType={'cities'}
+              offers={sortedOffers}
+              onCardHover={handleCardHover}
             />
           </div>
+        </section>
+        <div className="cities__right-section">
+          <Map
+            mapType={'cities'}
+            offers={offersByCity}
+            hoveredOfferId={hoveredOfferId}
+          />
         </div>
       </div>
-    </>
+    </div>
+
   );
 }
 

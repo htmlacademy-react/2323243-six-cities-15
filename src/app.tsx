@@ -11,8 +11,18 @@ import { HelmetProvider } from 'react-helmet-async';
 import { AppRoute } from './const';
 import Layout from './components/layout/layout';
 import ScrollToTop from './components/scroll-to-top/scroll-to-top';
+import { useAppSelector } from './hooks';
+import { getErrorStatus } from './store/offer-data/offer-data-selectors';
+import Error from './pages/error/error';
+
 
 function App(): JSX.Element {
+  const hasError = useAppSelector(getErrorStatus);
+
+  if (hasError) {
+    return (
+      <Error />);
+  }
   return (
     <HelmetProvider>
       <BrowserRouter>

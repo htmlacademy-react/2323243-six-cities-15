@@ -1,4 +1,8 @@
+import { useAppSelector } from '../../hooks';
+import { getActiveCity } from '../../store/app-process/app-process-selectors';
+
 function MainEmpty(): JSX.Element {
+  const selectedCity = useAppSelector(getActiveCity);
 
   return (
     <main className="page__main page__main--index page__main--index-empty">
@@ -8,7 +12,7 @@ function MainEmpty(): JSX.Element {
           <section className="cities__no-places">
             <div className="cities__status-wrapper tabs__content">
               <b className="cities__status">No places to stay available</b>
-              <p className="cities__status-description">We could not find any property available at the moment in Dusseldorf</p>
+              <p className="cities__status-description">We could not find any property available at the moment in {selectedCity}</p>
             </div>
           </section>
           <div className="cities__right-section"></div>

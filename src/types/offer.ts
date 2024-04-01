@@ -2,7 +2,7 @@ import Host from './host';
 import { City } from './city';
 import Loc from './loc';
 
-type Offer = { //для CityPage
+type Offer = {
   id: string;
   title: string;
   type: string;
@@ -15,7 +15,7 @@ type Offer = { //для CityPage
   rating: number;
 }
 
-type SelectedOffer = { //для OfferPage
+type SelectedOffer = {
   id: string;
   title: string;
   type: string;

@@ -1,26 +1,28 @@
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import { AppRoute } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { logoutAction } from '../../store/api-actions';
-import { favoritesNumber } from '../../store/actions';
+import { getFavsNumber } from '../../store/app-process/app-process-selectors';
+import { getUserData } from '../../store/users-process/user-process-selectors';
+import { favoritesNumber } from '../../store/app-process/app-process-slice';
 
 function Header(): JSX.Element {
   const { pathname } = useLocation();
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const favsNumber = useAppSelector((state) => state.favoritesNumber);
-  const userData = useAppSelector((state) => state.UserData);
+  const favsNumber = useAppSelector(getFavsNumber);
+  const userData = useAppSelector(getUserData);
 
   const isMain = pathname === AppRoute.Main as string;
   const isLogin = pathname === AppRoute.Login as string;
 
   const link = isMain ? '' : AppRoute.Main;
 
-  function handleSignOutClick() {
-    dispatch(logoutAction());
+  function handleSignOutClick(event: React.MouseEvent) {
+    event.preventDefault();
+
     dispatch(favoritesNumber(-favsNumber));
-    navigate(AppRoute.Main);
+    dispatch(logoutAction());
   }
 
   return (
@@ -43,7 +45,7 @@ function Header(): JSX.Element {
                   <Link className="header__nav-link header__nav-link--profile" to={userData ? AppRoute.Favorite : AppRoute.Login}>
                     <div className="header__avatar-wrapper user__avatar-wrapper">
                     </div>
-                    <span className="header__user-name user__name">{userData ? userData.email : 'Sign in'}</span>
+                    <span className="header__user-name user__name header__login">{userData ? userData.email : 'Sign in'}</span>
                     {
                       userData &&
                       <span className="header__favorite-count">{favsNumber}</span>
@@ -55,10 +57,14 @@ function Header(): JSX.Element {
                   <li className="header__nav-item">
                     <Link
                       className="header__nav-link"
-                      to="#"
+                      to="/"
                       onClick={handleSignOutClick}
                     >
-                      <span className="header__signout">Sign out</span>
+                      <span
+                        className="header__signout"
+                      >
+                        Sign out
+                      </span>
                     </Link>
                   </li>
                 }

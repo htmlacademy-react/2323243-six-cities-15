@@ -3,8 +3,10 @@ import { useState } from 'react';
 import { Offer } from '../../types/offer';
 import { AppRoute, AuthStatus } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { favoritesNumber } from '../../store/actions';
+import { favoritesNumber } from '../../store/app-process/app-process-slice';
 import { postFavStatusAction } from '../../store/api-actions';
+import { getAuthStatus } from '../../store/users-process/user-process-selectors';
+import { getRatingValue } from '../../utilities';
 
 type CardProps = {
   elementType: 'cities' | 'favorite' | 'offers';
@@ -37,7 +39,7 @@ function Card({ elementType, offer, onCardHover }: CardProps): JSX.Element {
   const status = isFav ? 0 : 1;
 
   const dispatch = useAppDispatch();
-  const authStatus = useAppSelector((state) => state.authStatus);
+  const authStatus = useAppSelector(getAuthStatus);
   const navigate = useNavigate();
 
   function handleFavClick() {
@@ -99,7 +101,7 @@ function Card({ elementType, offer, onCardHover }: CardProps): JSX.Element {
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span style={{ width: `${offer.rating / 5 * 100}%` }}></span>
+            <span style={{ width: `${getRatingValue(offer.rating)}%`}}></span>
             <span className="visually-hidden">Rating</span>
           </div>
         </div>
