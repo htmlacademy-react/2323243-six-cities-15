@@ -35,7 +35,11 @@ function OfferPage(): JSX.Element {
   return (
     <>
       {offerDataStatusSending === LoadingDataStatus.Pending && <PlaceHolder />}
-      {offerDataStatusSending !== LoadingDataStatus.Pending && !selectedOffer && <NotFound />}
+
+      {offerDataStatusSending !== LoadingDataStatus.Pending
+      && offerDataStatusSending !== LoadingDataStatus.Unsent
+      && !selectedOffer
+      && <NotFound />}
 
       {selectedOffer &&
         <div className="page">
@@ -55,7 +59,7 @@ function OfferPage(): JSX.Element {
               <NearPlaces upcomingOffers={nearOffersCut} />
             </div>
           </main>
-        </div>};
+        </div>}
     </>
   );
 }

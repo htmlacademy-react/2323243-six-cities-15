@@ -15,8 +15,8 @@ function ReviewForm(): JSX.Element {
     'terribly': '1'
   };
 
-  const MIN_COMMENT_LENGTH = 49;
-  const MAX_COMMENT_LENGTH = 299;
+  const MIN_COMMENT_LENGTH = 50;
+  const MAX_COMMENT_LENGTH = 300;
 
   const { offerId } = useParams();
   const dispatch = useAppDispatch();
@@ -59,7 +59,7 @@ function ReviewForm(): JSX.Element {
   }, [sendingStatus, dispatch]);
 
 
-  const isCommentNotValid = (comment.length < MIN_COMMENT_LENGTH) || (comment.length > MAX_COMMENT_LENGTH);
+  const isCommentNotValid = (comment.length <= MIN_COMMENT_LENGTH) || (comment.length >= MAX_COMMENT_LENGTH);
   const isRatingNotValid = Boolean(Number(rating)) === false;
 
   const isDisabledSubmit = isCommentNotValid || isRatingNotValid || isSending;
@@ -109,8 +109,8 @@ function ReviewForm(): JSX.Element {
         id="review" name="review"
         placeholder="Tell how was your stay, what you like and what can be improved"
         value={comment}
-        minLength={50}
-        maxLength={300}
+        minLength={MIN_COMMENT_LENGTH}
+        maxLength={MAX_COMMENT_LENGTH}
         disabled={isSending}
         onChange={handleTextAreaChange}
       >
@@ -118,7 +118,7 @@ function ReviewForm(): JSX.Element {
 
       <div className="reviews__button-wrapper">
         <p className="reviews__help">
-          To submit review please make sure to set <span className="reviews__star">rating</span> and describe your stay with at least <b className="reviews__text-amount">50 characters</b>.
+          To submit review please make sure to set <span className="reviews__star">rating</span> and describe your stay with at least <b className="reviews__text-amount">{MIN_COMMENT_LENGTH} characters</b>.
         </p>
         <button
           className="reviews__submit form__submit button"

@@ -45,8 +45,10 @@ function Card({ elementType, offer, onCardHover }: CardProps): JSX.Element {
     const isFavorite = favOffer.isFavorite;
     const status = isFavorite ? 0 : 1;
     if (authStatus === AuthStatus.Auth) {
-      dispatch(postFavStatusAction({ offerId: offer.id, status: status }));
+      dispatch(postFavStatusAction({ offerId: offer.id, status: status, elementType: elementType }));
+
     }
+
   }
 
   function handleMouseEnter() {
@@ -95,7 +97,7 @@ function Card({ elementType, offer, onCardHover }: CardProps): JSX.Element {
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span style={{ width: `${getRatingValue(offer.rating)}%`}}></span>
+            <span style={{ width: `${getRatingValue(offer.rating)}%` }}></span>
             <span className="visually-hidden">Rating</span>
           </div>
         </div>

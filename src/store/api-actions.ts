@@ -9,8 +9,8 @@ import { AuthData } from '../types/auth-data';
 import { UserData } from '../types/user-data';
 import { Favorite, Offer, SelectedOffer } from '../types/offer';
 import ReviewType, { CommentSend } from '../types/review';
-import { favoritesNumber, setError } from './app-process/app-process-slice';
-import { addFavOffer, dropAllFavorites, dropFavOffer, updateOffers } from './offer-data/offer-data-slice';
+import { setError } from './app-process/app-process-slice';
+import { addFavOffer, dropAllFavorites, dropFavOffer, updateNearPlaces, updateOffers } from './offer-data/offer-data-slice';
 
 
 const fetchOffersAction = createAsyncThunk<Offer[], undefined, {
@@ -18,15 +18,8 @@ const fetchOffersAction = createAsyncThunk<Offer[], undefined, {
   extra: AxiosInstance;
 }>(
   'data/fetchOffers',
-  async (_arg, { dispatch, extra: api, }) => {
+  async (_arg, { extra: api, }) => {
     const { data } = await api.get<Offer[]>(APIRoute.Offers);
-
-    const favNumbers = data.reduce((sum, item) => {
-      const number = Number(item.isFavorite);
-      return sum + number;
-    }, 0);
-
-    dispatch(favoritesNumber(favNumbers));
 
     return data;
   }
@@ -82,9 +75,9 @@ const postCommentAction = createAsyncThunk<
 
 const postFavStatusAction = createAsyncThunk<
   Offer,
-  { offerId: string | undefined; status: number }, ThunkAPI
+  { offerId: string | undefined; status: number; elementType?: string }, ThunkAPI
 >('user/postFavStatus',
-  async ({ offerId, status }, { dispatch, extra: api }) => {
+  async ({ offerId, status, elementType }, { dispatch, extra: api }) => {
     const path = `${APIRoute.Favorite}/${offerId}/${status}`;
     const { data } = await api.post<Favorite>(path);
 
@@ -93,7 +86,13 @@ const postFavStatusAction = createAsyncThunk<
     } else {
       dispatch(addFavOffer(data));
     }
-    dispatch(updateOffers(data));
+
+    if (elementType === 'offers') {
+      dispatch(updateNearPlaces(data));
+    } else {
+      dispatch(updateOffers(data));
+    }
+
 
     return data;
 

@@ -7,8 +7,9 @@ import { loginAction } from '../../store/api-actions';
 import { getAuthStatus } from '../../store/users-process/user-process-selectors';
 import { setCity } from '../../store/app-process/app-process-slice';
 
-import { AppRoute, AuthStatus, citiesName } from '../../const';
+import { AppRoute, AuthStatus, CITY_NAMES } from '../../const';
 import { pickRandomElement } from '../../utilities';
+import Header from '../../components/header/header';
 
 
 function LoginPage() {
@@ -18,9 +19,9 @@ function LoginPage() {
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
-  const randomCity = pickRandomElement(citiesName);
+  const randomCity = pickRandomElement(CITY_NAMES);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  function handleFormSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     if (emailRef.current && passwordRef.current) {
@@ -49,6 +50,7 @@ function LoginPage() {
       <Helmet>
         <title>{'6 cities - login'}</title>
       </Helmet>
+      <Header block={'noNavigation'}/>
       <main className="page__main page__main--login">
         <div className="page__login-container container">
           <section className="login">
@@ -57,7 +59,7 @@ function LoginPage() {
               className="login__form form"
               action="#"
               method="post"
-              onSubmit={handleSubmit}
+              onSubmit={handleFormSubmit}
             >
               <div className="login__input-wrapper form__input-wrapper">
                 <label className="visually-hidden">E-mail</label>
