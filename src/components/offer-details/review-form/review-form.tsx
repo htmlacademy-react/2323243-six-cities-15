@@ -1,9 +1,10 @@
-import { FormEvent, ChangeEvent, Fragment, useState, useRef } from 'react';
+import { FormEvent, ChangeEvent, Fragment, useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
-import { postCommentAction } from '../../../store/api-actions';
+import { clearErrorAction, postCommentAction } from '../../../store/api-actions';
 import { useParams } from 'react-router-dom';
-import { getIsReviewSending, getReviews } from '../../../store/offer-data/offer-data-selectors';
-import { isReviewSending, setReviews } from '../../../store/offer-data/offer-data-slice';
+import { getReviewStatusSending } from '../../../store/offer-data/offer-data-selectors';
+import { LoadingDataStatus } from '../../../const';
+import { setError } from '../../../store/app-process/app-process-slice';
 
 function ReviewForm(): JSX.Element {
   const ratingMap = {
@@ -17,43 +18,15 @@ function ReviewForm(): JSX.Element {
   const MIN_COMMENT_LENGTH = 49;
   const MAX_COMMENT_LENGTH = 299;
 
-  const [comment, setComment] = useState('');
-  const [rating, setRating] = useState('0');
-  const isSending = useAppSelector(getIsReviewSending);
-
-  const formRef = useRef<HTMLFormElement | null>(null);
-  const form = formRef.current;
-
-  const dispatch = useAppDispatch();
   const { offerId } = useParams();
-  const reviewsList = useAppSelector(getReviews);
-  const reviewsListCopy = structuredClone(reviewsList);
+  const dispatch = useAppDispatch();
 
-  const sendData = {
-    reviewData: { comment, rating: Number(rating) },
-    offerId,
-  };
+  const [rating, setRating] = useState('0');
+  const [comment, setComment] = useState('');
 
+  const sendingStatus = useAppSelector(getReviewStatusSending);
+  const isSending = sendingStatus === LoadingDataStatus.Pending;
 
-  function isDisabledSubmit() {
-    const isCommentValid = (comment.length < MIN_COMMENT_LENGTH) || (comment.length > MAX_COMMENT_LENGTH);
-    const isRatingValid = Boolean(Number(rating)) === false;
-
-    return (isCommentValid || isRatingValid) || isSending;
-  }
-
-  function isDisabledForm(isSanding: boolean): boolean {
-    // form?.toggleAttribute('disabled', isSanding);
-    return isSanding
-  }
-
-  function formReset() {
-    if (form) {
-      form.reset();
-      setComment('');
-    }
-
-  }
 
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
     setRating(event.target.value);
@@ -63,33 +36,40 @@ function ReviewForm(): JSX.Element {
     setComment(event.target.value);
   }
 
+  const sendData = {
+    reviewData: { comment, rating: Number(rating) },
+    offerId,
+  };
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    dispatch(isReviewSending(true));
-    isDisabledForm(isSending);
-
-    if (rating && comment && offerId && form) {
-      dispatch(postCommentAction(sendData)).unwrap()
-        .then((review) => {
-          reviewsListCopy.push(review);
-        })
-        .then(() => {
-          dispatch(setReviews(reviewsListCopy));
-          formReset();
-        })
-        .then(() => {
-          dispatch(isReviewSending(false));
-          isDisabledForm(isSending);
-        });
-    }
+    dispatch(postCommentAction(sendData));
   }
+
+  useEffect(() => {
+    switch (sendingStatus) {
+      case LoadingDataStatus.Success:
+        setComment('');
+        setRating('');
+        break;
+      case LoadingDataStatus.Error:
+        dispatch(setError('Отзыв не отправлен, попробуйте снова'));
+        dispatch(clearErrorAction());
+    }
+
+  }, [sendingStatus, dispatch]);
+
+
+  const isCommentNotValid = (comment.length < MIN_COMMENT_LENGTH) || (comment.length > MAX_COMMENT_LENGTH);
+  const isRatingNotValid = Boolean(Number(rating)) === false;
+
+  const isDisabledSubmit = isCommentNotValid || isRatingNotValid || isSending;
+
 
   return (
     <form
       className="reviews__form form"
       action="#"
       method="post"
-      ref={formRef}
       onSubmit={handleSubmit}
     >
       <label className="reviews__label form__label" htmlFor="review">Your review</label>
@@ -105,7 +85,7 @@ function ReviewForm(): JSX.Element {
                 id={`${score}-stars`}
                 type="radio"
                 checked={rating === score}
-                disabled={isDisabledForm(isSending)}
+                disabled={isSending}
                 onChange={handleInputChange}
               />
               <label
@@ -131,7 +111,7 @@ function ReviewForm(): JSX.Element {
         value={comment}
         minLength={50}
         maxLength={300}
-        disabled={isDisabledForm(isSending)}
+        disabled={isSending}
         onChange={handleTextAreaChange}
       >
       </textarea>
@@ -143,7 +123,7 @@ function ReviewForm(): JSX.Element {
         <button
           className="reviews__submit form__submit button"
           type="submit"
-          disabled={isDisabledSubmit()}
+          disabled={isDisabledSubmit}
         >
           {isSending ? 'Sending...' : 'Submit'}
         </button>

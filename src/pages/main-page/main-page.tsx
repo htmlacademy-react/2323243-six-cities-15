@@ -5,13 +5,13 @@ import { useAppSelector } from '../../hooks';
 import { PlaceHolder } from '../../components/placeholder/placeholder';
 import { AuthStatus } from '../../const';
 import MainEmpty from '../../components/main-empty/main-empty';
-import { getIsLoaded, getOffers } from '../../store/offer-data/offer-data-selectors';
+import { getIsOffersLoading, getOffers } from '../../store/offer-data/offer-data-selectors';
 import { getAuthStatus } from '../../store/users-process/user-process-selectors';
 import { getActiveCity } from '../../store/app-process/app-process-selectors';
 
 function MainPage(): JSX.Element {
   const offers = useAppSelector(getOffers);
-  const isLoaded = useAppSelector(getIsLoaded);
+  const isLoading = useAppSelector(getIsOffersLoading);
   const authStatus = useAppSelector(getAuthStatus);
 
   const filterValue = useAppSelector(getActiveCity);
@@ -21,10 +21,10 @@ function MainPage(): JSX.Element {
 
   return (
     <>
-      {(!isLoaded || authStatus === AuthStatus.Unknown) && <PlaceHolder />}
+      {(isLoading || authStatus === AuthStatus.Unknown) && <PlaceHolder />}
 
 
-      {isLoaded &&
+      {!isLoading &&
         <div className="page page--gray page--main">
           <main className={`${offersLength === 0 ? 'page__main--index-empty' : ''}page__main page__main--index`}>
             <h1 className="visually-hidden">Cities</h1>

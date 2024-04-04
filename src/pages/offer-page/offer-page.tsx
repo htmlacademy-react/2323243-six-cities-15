@@ -11,7 +11,8 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import { PlaceHolder } from '../../components/placeholder/placeholder';
 import { fetchSelectedOfferDataAction } from '../../store/api-actions';
 import NotFound from '../404-page/404-page';
-import { getIsLoaded, getNearPlaces, getSelectedOffer } from '../../store/offer-data/offer-data-selectors';
+import { getNearPlaces, getOfferDataStatusSending, getSelectedOffer } from '../../store/offer-data/offer-data-selectors';
+import { LoadingDataStatus } from '../../const';
 
 
 function OfferPage(): JSX.Element {
@@ -19,7 +20,7 @@ function OfferPage(): JSX.Element {
   const nearOffers = useAppSelector(getNearPlaces);
   const selectedOffer = useAppSelector(getSelectedOffer);
 
-  const isReady = useAppSelector(getIsLoaded);
+  const offerDataStatusSending = useAppSelector(getOfferDataStatusSending);
 
   const { offerId } = useParams();
   useEffect(() => {
@@ -28,17 +29,15 @@ function OfferPage(): JSX.Element {
     }
   }, [dispatch, offerId]);
 
-  if (!selectedOffer || !offerId) {
-    return <NotFound />;
-  }
 
   const nearOffersCut = nearOffers.slice(0, 3);
 
   return (
     <>
-      {!isReady && <PlaceHolder />}
+      {offerDataStatusSending === LoadingDataStatus.Pending && <PlaceHolder />}
+      {offerDataStatusSending !== LoadingDataStatus.Pending && !selectedOffer && <NotFound />}
 
-      {isReady && selectedOffer &&
+      {selectedOffer &&
         <div className="page">
           <Helmet>
             <title>{'6 cities - offer'}</title>
@@ -48,8 +47,8 @@ function OfferPage(): JSX.Element {
               <OfferDetails selectedOffer={selectedOffer} />
               <Map
                 mapType={'offer'}
-                offers={nearOffersCut}
-                selectedOffer={selectedOffer}
+                offers={[...nearOffersCut, selectedOffer]}
+                offerId={selectedOffer.id}
               />
             </section>
             <div className="container">

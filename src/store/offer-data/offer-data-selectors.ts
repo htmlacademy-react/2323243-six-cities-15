@@ -1,4 +1,4 @@
-import { NameSpace } from '../../const';
+import { LoadingDataStatus, NameSpace } from '../../const';
 import { Favorite, Offer, SelectedOffer } from '../../types/offer';
 import ReviewType from '../../types/review';
 import { State } from '../../types/state';
@@ -9,8 +9,10 @@ const getNearPlaces = (state: State): Offer[] => state[NameSpace.Data].nearPlace
 const getReviews = (state: State): ReviewType[] => state[NameSpace.Data].reviews;
 const getFavs = (state: State): Favorite[] => state[NameSpace.Data].favs;
 
-const getIsReviewSending = (state: State): boolean => state[NameSpace.Data].isReviewSending;
-const getIsLoaded = (state: State): boolean => state[NameSpace.Data].isLoaded;
+const getReviewStatusSending = (state: State): LoadingDataStatus => state[NameSpace.Data].reviewStatusSending;
+const getIsOffersLoading = (state: State): boolean => state[NameSpace.Data].isOffersLoading;
+const getOfferDataStatusSending = (state: State): LoadingDataStatus => state[NameSpace.Data].offerDataStatusSending;
+const getFavLoadingStatus = (state: State): LoadingDataStatus => state[NameSpace.Data].favsLoadingStatus;
 const getErrorStatus = (state: State): boolean => state[NameSpace.Data].hasError;
 
 
@@ -22,7 +24,9 @@ export {
   getFavs,
 
 
-  getIsReviewSending,
-  getIsLoaded,
+  getReviewStatusSending,
+  getIsOffersLoading,
+  getOfferDataStatusSending,
+  getFavLoadingStatus,
   getErrorStatus,
 };

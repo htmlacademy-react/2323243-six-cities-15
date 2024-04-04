@@ -5,12 +5,13 @@ import Header from '../header/header';
 function Layout(): JSX.Element {
   return (
 
-    <div className="page page--gray page--main">
+    // <div className="page page--gray">
+    // <div className="page">
+    <>
       <Header />
-      <main>
-        <Outlet />
-      </main>
-    </div>
+      <Outlet />
+    </>
+    // </div>
 
   );
 }

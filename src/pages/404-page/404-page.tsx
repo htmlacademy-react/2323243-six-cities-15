@@ -5,7 +5,7 @@ import { Helmet } from 'react-helmet-async';
 
 function NotFound() {
   return (
-    <div className={`page page--gray page--main ${styles.notfound}`}>
+    <div className={`${styles.notfound} page`}>
       <Helmet>
         <title>{'6 cities - Not Found'}</title>
       </Helmet>

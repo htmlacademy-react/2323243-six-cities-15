@@ -1,4 +1,4 @@
-import { AuthStatus } from '../const';
+import { AuthStatus, LoadingDataStatus } from '../const';
 import { ActiveCity } from './city';
 import { Favorite, Offer, SelectedOffer } from './offer';
 import ReviewType from './review';
@@ -11,16 +11,18 @@ type UserProcess = {
 
 type OffersData = {
   'offers': Offer[];
-  'isLoaded': boolean;
   'hasError': boolean;
+  'isOffersLoading': boolean;
 
   'selectedOffer': null | SelectedOffer;
   'nearPlaces': Offer[];
   'reviews': ReviewType[];
+  'offerDataStatusSending': LoadingDataStatus;
 
-  'isReviewSending': boolean;
+  'reviewStatusSending': LoadingDataStatus;
 
   'favs': Favorite[];
+  'favsLoadingStatus': LoadingDataStatus;
 }
 
 type AppProcess = {

@@ -7,14 +7,13 @@ import { useLocation } from 'react-router-dom';
 import useMap from '../../hooks/useMap';
 import { AppRoute, URL_MARKER_CURRENT, URL_MARKER_DEFAULT } from '../../const';
 
-import { Offer, SelectedOffer } from '../../types/offer';
+import { Offer } from '../../types/offer';
 import Loc from '../../types/loc';
 
 type MapProps = {
   mapType: 'cities' | 'offer';
   offers: Offer[];
-  selectedOffer?: SelectedOffer;
-  hoveredOfferId?: Offer['id'] | null;
+  offerId: Offer['id'] | null;
 }
 
 const defaultCustomIcon = L.icon({
@@ -30,7 +29,7 @@ const currentCustomIcon = L.icon({
 });
 
 
-function Map({ mapType, offers, selectedOffer, hoveredOfferId }: MapProps): JSX.Element {
+function Map({ mapType, offers, offerId }: MapProps): JSX.Element {
 
   const { pathname } = useLocation();
   const isOfferPage = pathname.startsWith(AppRoute.Offer);
@@ -41,46 +40,6 @@ function Map({ mapType, offers, selectedOffer, hoveredOfferId }: MapProps): JSX.
   const mapRef = useRef(null);
   const map = useMap(mapRef, location);
 
-
-  useEffect(() => {
-    if (map) {
-      const markerLayer = L.layerGroup().addTo(map);
-
-      offers?.forEach((offer) => {
-
-        const marker = L.marker({
-          lat: offer.location.latitude,
-          lng: offer.location.longitude
-        });
-
-        marker
-          .setIcon(
-            hoveredOfferId !== undefined && offer.id === hoveredOfferId && mapType === 'cities'
-              ? currentCustomIcon
-              : defaultCustomIcon
-          )
-          .addTo(markerLayer)
-          .bindPopup(`<h2>${offer.title}</h2><p style="font-size:1.5em">€${offer.price}</p>`);
-
-        let selectedOfferMarker;
-        if (mapType === 'offer' && selectedOffer) {
-          selectedOfferMarker = L.marker({
-            lat: selectedOffer.location.latitude,
-            lng: selectedOffer.location.longitude,
-          });
-
-          selectedOfferMarker.setIcon(currentCustomIcon)
-            .addTo(markerLayer)
-            .bindPopup(`<h2>${selectedOffer.title}</h2><p style="font-size:1.5em">€${selectedOffer.price}</p>`);
-        }
-      });
-
-      return () => {
-        map.removeLayer(markerLayer);
-      };
-    }
-  }, [map, offers, hoveredOfferId, isOfferPage, selectedOffer, mapType]);
-
   useEffect(() => {
     if (map && location) {
       map.setView({
@@ -90,6 +49,35 @@ function Map({ mapType, offers, selectedOffer, hoveredOfferId }: MapProps): JSX.
 
     }
   }, [map, location]);
+
+
+  useEffect(() => {
+    if (map) {
+      const markerLayer = L.layerGroup().addTo(map);
+
+      offers.forEach((offer) => {
+
+        const marker = L.marker({
+          lat: offer.location.latitude,
+          lng: offer.location.longitude
+        });
+
+        marker
+          .setIcon(
+            offerId !== undefined && offer.id === offerId
+              ? currentCustomIcon
+              : defaultCustomIcon
+          )
+          .addTo(markerLayer)
+          .bindPopup(`<h2>${offer.title}</h2><p style="font-size:1.5em">€${offer.price}</p>`);
+
+      });
+
+      return () => {
+        map.removeLayer(markerLayer);
+      };
+    }
+  }, [map, offers, offerId, isOfferPage, mapType]);
 
 
   return (
