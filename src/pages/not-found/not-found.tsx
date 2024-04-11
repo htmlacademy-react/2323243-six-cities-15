@@ -1,4 +1,4 @@
-import styles from './404-page.module.css';
+import styles from './not-found.css';
 
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
