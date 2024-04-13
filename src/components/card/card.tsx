@@ -65,6 +65,7 @@ function Card({ elementType, offer, onCardHover }: CardProps): JSX.Element {
       className={`${options[elementType].className}__card place-card`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      data-testid='card'
     >
       {
         offer.isPremium &&
