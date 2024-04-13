@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 
 import { PlaceHolder } from '../../components/placeholder/placeholder';
 import { fetchSelectedOfferDataAction } from '../../store/api-actions';
-import NotFound from '../404-page/404-page';
+import NotFound from '../not-found/not-found.tsx';
 import { getNearPlaces, getOfferDataStatusSending, getSelectedOffer } from '../../store/offer-data/offer-data-selectors';
 import { LoadingDataStatus } from '../../const';
 

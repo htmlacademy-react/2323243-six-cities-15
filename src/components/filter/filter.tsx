@@ -7,9 +7,10 @@ import { Link } from 'react-router-dom';
 import { AppRoute } from '../../const';
 import { getActiveCity } from '../../store/app-process/app-process-selectors';
 
+const filters: Filters = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
+
 function Filter(): JSX.Element {
   const selectedCity = useAppSelector(getActiveCity);
-  const filters: Filters = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
   const dispatch = useAppDispatch();
 
   function handleLiClick(filter: ActiveCity) {
@@ -21,12 +22,14 @@ function Filter(): JSX.Element {
       {filters.map((filter) => (
         <li
           key={filter}
+          title={filter}
           className="locations__item"
           onClick={handleLiClick(filter)}
         >
           <Link
             to={AppRoute.Main}
             className={`${filter === selectedCity ? 'tabs__item--active ' : ''}locations__item-link tabs__item`}
+            data-testid={filter === selectedCity ? 'active' : 'inactive'}
           >
             <span>{filter}</span>
           </Link>
@@ -39,3 +42,4 @@ function Filter(): JSX.Element {
 }
 
 export default Filter;
+export {filters};
